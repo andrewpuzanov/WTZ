@@ -1,7 +1,4 @@
-/* World Time Zones v1.9.1
-   - Drag & drop reordering of rows by grabbing the first column (city/zone).
-   - "Hand" cursor on the first column; grab/grabbing during drag.
-*/
+/* World Time Zones v1.9.2 */
 (() => {
   const $ = (sel, root=document) => root.querySelector(sel);
   const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
@@ -83,7 +80,6 @@
   const themeSelect = $("#themeSelect");
   const customTzBtn = $("#customTzBtn");
 
-  // Storage
   const STORAGE_KEY = "wtb_lite_state";
   const storage = {
     get() {
@@ -102,7 +98,6 @@
     }
   };
 
-  // State
   let state = {
     dateISO: toISODate(new Date()),
     rows: [],
@@ -114,12 +109,7 @@
   function persist() { storage.set({ version: window.__APP_VERSION__, ...state }); }
   function loadPersisted() { const obj = storage.get(); if (obj) state = { ...state, ...obj }; }
 
-  function toISODate(d) {
-    const y = d.getFullYear();
-    const m = String(d.getMonth()+1).padStart(2,'0');
-    const day = String(d.getDate()).padStart(2,'0');
-    return `${y}-${m}-${day}`;
-  }
+  function toISODate(d) { return d.toISOString().slice(0,10); }
 
   function applyTheme(index) { document.documentElement.setAttribute("data-theme", String(index)); }
 
