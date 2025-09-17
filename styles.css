@@ -140,7 +140,7 @@ input, select, button { font-family: inherit; }
   transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease, color .15s ease;
 }
 
-/* Hide (but keep in DOM) the custom time zone button */
+/* Hide (but keep) custom time zone button */
 #customTzBtn { display: none; }
 
 /* Grid */
@@ -172,11 +172,22 @@ input, select, button { font-family: inherit; }
   position: relative;
 }
 .row:last-child { border-bottom: none; }
+
+/* Drag & drop visuals */
+.row.dragging { opacity: .7; }
+.row.drop-before { box-shadow: 0 -2px 0 0 var(--accent); }
+.row.drop-after  { box-shadow: 0  2px 0 0 var(--accent); }
+
 .row-header {
   padding: 10px 12px;
   display:flex; flex-direction: column; justify-content:center; gap: 4px;
   border-right: 1px solid var(--grid-border);
+  cursor: pointer;               /* "hand" on hover */
+  user-select: none;
 }
+.row-header[draggable="true"] { cursor: grab; }
+.row-header[draggable="true"]:active { cursor: grabbing; }
+
 .city-name { font-weight:700; }
 .city-sub { font-size:12px; color: var(--muted); }
 

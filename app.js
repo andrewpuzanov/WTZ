@@ -1,4 +1,7 @@
-/* World Time Zones v1.8.3 (same logic as v1.8.2; only CSS hides custom TZ button) */
+/* World Time Zones v1.9.1
+   - Drag & drop reordering of rows by grabbing the first column (city/zone).
+   - "Hand" cursor on the first column; grab/grabbing during drag.
+*/
 (() => {
   const $ = (sel, root=document) => root.querySelector(sel);
   const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
@@ -108,14 +111,8 @@
     focusHour: new Date().getHours()
   };
 
-  function persist() {
-    storage.set({ version: window.__APP_VERSION__, ...state });
-  }
-  function loadPersisted() {
-    const obj = storage.get();
-    if (!obj) return;
-    state = { ...state, ...obj };
-  }
+  function persist() { storage.set({ version: window.__APP_VERSION__, ...state }); }
+  function loadPersisted() { const obj = storage.get(); if (obj) state = { ...state, ...obj }; }
 
   function toISODate(d) {
     const y = d.getFullYear();
@@ -124,9 +121,7 @@
     return `${y}-${m}-${day}`;
   }
 
-  function applyTheme(index) {
-    document.documentElement.setAttribute("data-theme", String(index));
-  }
+  function applyTheme(index) { document.documentElement.setAttribute("data-theme", String(index)); }
 
   function labelForRowSub(dateISO, tz) {
     const dt = makeZoned(dateISO, 12, tz);
@@ -177,6 +172,53 @@
     bar.style.width = `${cellW}px`;
   }
 
+  function attachDnD(node, idx) {
+    const handle = $(".row-header", node);
+    const row    = node;
+
+    handle.addEventListener("dragstart", (e) => {
+      e.dataTransfer.effectAllowed = "move";
+      try { e.dataTransfer.setData("text/plain", String(idx)); } catch(_) {}
+      row.classList.add("dragging");
+      grid._dragFrom = idx;
+    });
+
+    handle.addEventListener("dragend", () => {
+      row.classList.remove("dragging");
+      grid._dragFrom = null;
+      $$(".row", grid).forEach(r => r.classList.remove("drop-before", "drop-after"));
+    });
+
+    row.addEventListener("dragover", (e) => {
+      if (grid._dragFrom == null) return;
+      e.preventDefault();
+      const rect = row.getBoundingClientRect();
+      const after = (e.clientY - rect.top) > rect.height / 2;
+      $$(".row", grid).forEach(r => r.classList.remove("drop-before", "drop-after"));
+      row.classList.add(after ? "drop-after" : "drop-before");
+      grid._dragOver = { idx, after };
+    });
+
+    row.addEventListener("dragleave", () => {
+      row.classList.remove("drop-before", "drop-after");
+    });
+
+    row.addEventListener("drop", (e) => {
+      e.preventDefault();
+      const from = grid._dragFrom;
+      const over = grid._dragOver || { idx, after: false };
+      if (from == null) return;
+      let to = over.idx + (over.after ? 1 : 0);
+      if (to > from) to--; // adjust for removal
+      if (to === from || to < 0 || to > state.rows.length) return;
+
+      const item = state.rows.splice(from, 1)[0];
+      state.rows.splice(to, 0, item);
+      persist();
+      render();
+    });
+  }
+
   function render() {
     datePicker.value = state.dateISO;
     timeFormatSelect.value = state.timeFormat;
@@ -186,6 +228,7 @@
     grid.innerHTML = "";
     state.rows.forEach((row, idx) => {
       const node = rowTemplate.content.firstElementChild.cloneNode(true);
+      node.setAttribute("data-index", String(idx));
       $(".city-name", node).textContent = row.city;
       $(".city-sub", node).textContent = labelForRowSub(state.dateISO, row.tz);
       const tl = $(".timeline", node);
@@ -227,6 +270,7 @@
         render();
       });
 
+      attachDnD(node, idx);
       grid.appendChild(node);
     });
 

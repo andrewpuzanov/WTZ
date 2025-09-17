@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>World Time Zones v1.8.3</title>
+  <title>World Time Zones v1.9.1</title>
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
   <header class="app-header">
     <div class="maxline header-inner">
       <div class="title-wrap">
-        <h1>World Time Zones <small>v1.8.3</small></h1>
+        <h1>World Time Zones <small>v1.9.1</small></h1>
       </div>
       <div class="controls">
         <label>Date:
@@ -60,7 +60,7 @@
 
   <template id="rowTemplate">
     <div class="row" role="row">
-      <div class="row-header" role="rowheader">
+      <div class="row-header drag-handle" role="rowheader" draggable="true">
         <div class="city-name"></div>
         <div class="city-sub"></div>
       </div>
@@ -70,7 +70,7 @@
   </template>
 
   <script>
-    window.__APP_VERSION__ = "v1.8.3";
+    window.__APP_VERSION__ = "v1.9.1";
   </script>
   <script src="app.js"></script>
 </body>
