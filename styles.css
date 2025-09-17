@@ -214,11 +214,35 @@ input, select, button { font-family: inherit; }
   display:flex; flex-direction: column; gap:2px; align-items:center; justify-content:center;
   font-size: 11px; color: var(--muted); min-height: 48px;
 }
-/* alternating column background */
-.hour:nth-child(odd){ background: var(--hour-alt); }
-/* top/bottom borders for darker columns at the very first and very last row */
-.grid > .row:first-child .timeline .hour:nth-child(odd){ border-top: 1px solid var(--grid-border); }
-.grid > .row:last-child  .timeline .hour:nth-child(odd){ border-bottom: 1px solid var(--grid-border); }
 
-.hour .date { opacity:.9; user-select: none; font-size: 10px; color: var(--muted); white-space: nowrap; line-height: 1.1; }
-.hour .time { font-weight:600; color: var(--text); font-size: var(--time-font-size); white-space: nowrap; line-height: 1.1; }
+/* alternating column background */
+    .hour:nth-child(odd) {
+        background: var(--hour-alt);
+    }
+
+/* top/bottom borders for darker columns at the very first and very last row */
+.grid > .row:first-child .timeline .hour:nth-child(odd) {
+    border-top: 1px solid var(--grid-border);
+}
+
+.grid > .row:last-child .timeline .hour:nth-child(odd) {
+    border-bottom: 1px solid var(--grid-border);
+}
+
+.hour .date {
+    opacity: .9;
+    user-select: none;
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+    line-height: 1.1;
+}
+
+.hour .time {
+    font-weight: 600;
+    color: var(--text);
+    font-size: var(--time-font-size);
+    white-space: nowrap;
+    line-height: 1.1;
+    font-weight: bold;
+}
