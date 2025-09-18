@@ -1,4 +1,4 @@
-/* World Time Zones v1.9.74 */
+/* World Time Zones v1.9.76 */
 (() => {
   const $ = (sel, root=document) => root.querySelector(sel);
   const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
@@ -134,7 +134,7 @@
   }
 
   
-// v1.9.74 — Google Calendar helper
+// v1.9.76 — Google Calendar helper
 function z2(n){ return String(n).padStart(2,'0'); }
 function makeGCalUrl(tz, isoDate, hour, minutes){
   minutes = minutes || 0;
@@ -518,7 +518,7 @@ tl.appendChild(hourEl);
 
 
 
-// v1.9.74 — DOM-first Follow the Sun (east → west) that does NOT depend on state
+// v1.9.76 — DOM-first Follow the Sun (east → west) that does NOT depend on state
 (function(){
   function parseOffset(txt){
     // Accept "UTC+5", "UTC+05:30", "GMT-3", etc.
@@ -609,7 +609,7 @@ tl.appendChild(hourEl);
   })();
 })();
 
-// v1.9.74 — persist current DOM order (state + cookie fallback)
+// v1.9.76 — persist current DOM order (state + cookie fallback)
 function _wtb_syncOrderFromDOM(){
   try{
     var container = document.getElementById('timeGrid') ||
@@ -652,7 +652,7 @@ function _wtb_syncOrderFromDOM(){
 }
 
 
-// v1.9.74 — explicit order save & restore
+// v1.9.76 — explicit order save & restore
 (function(){
   function _wtb_rowKeyFromObj(o){
     var label=(o && (o.city||o.label||'')).toLowerCase();
@@ -727,7 +727,7 @@ function _wtb_syncOrderFromDOM(){
 })();
 
 
-// v1.9.74 — ultra-direct order persistence (label-based), DOM-first
+// v1.9.76 — ultra-direct order persistence (label-based), DOM-first
 (function(){
   function container(){
     return document.getElementById('timeGrid') ||
@@ -805,7 +805,7 @@ function _wtb_syncOrderFromDOM(){
 })();
 
 
-// v1.9.74 — robust Google Calendar helpers
+// v1.9.76 — robust Google Calendar helpers
 function z2(n){ return String(n).padStart(2,'0'); }
 function makeGCalUrlFromParts(tz, y, m, d, h, min){
   min = min||0;

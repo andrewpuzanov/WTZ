@@ -428,3 +428,29 @@ html[data-theme="8"] { /* Sky */
   gap: 10px;
   align-items: center;
 }
+
+
+/* v1.9.75 — hour cell hover calendar glyph */
+.hour{ position:relative; }
+.hour:focus{ outline:none; }
+.hour::after{
+  content:"";
+  position:absolute;
+  top:1px;
+  right:6px;
+  width:16px;
+  height:16px;
+  opacity:0;
+  transition:opacity .15s ease-in-out;
+  /* calendar icon, uses currentColor so it adapts to theme */
+  background-repeat:no-repeat;
+  background-size:contain;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='currentColor'><path d='M7 2a1 1 0 0 0-1 1v1H5a3 3 0 0 0-3 3v1h20V7a3 3 0 0 0-3-3h-1V3a1 1 0 1 0-2 0v1H8V3a1 1 0 0 0-1-1zM22 10H2v9a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-9zm-12 3h2v2h-2v-2zm-4 0h2v2H6v-2zm8 0h2v2h-2v-2zm-8 4h2v2H6v-2zm4 0h2v2h-2v-2zm8-4h2v2h-2v-2zm-4 4h2v2h-2v-2z'/></svg>");
+  pointer-events:none;
+}
+.hour:hover::after,
+.hour:focus-visible::after{ opacity:0.7; }
+/* Slightly dimmer in dark themes to avoid glare */
+.theme-dark .hour:hover::after,
+.theme-dark .hour:focus-visible::after{ opacity:0.7; }
+
