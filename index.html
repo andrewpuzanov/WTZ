@@ -3,16 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>World Time Zones v1.9.42</title>
+  <title>World Time Zones v1.9.46</title>
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
   <header class="app-header">
     <div class="maxline header-inner">
       <div class="title-wrap">
-        <h1>World Time Zones <small>v1.9.42</small></h1>
+        <h1>World Time Zones <small>v1.9.46</small></h1>
       </div>
-      <div class="controls">
+      
+    </div>
+  </header>
+
+  <section class="add-city">
+    <div class="maxline"><div class="add-left">
+      <form id="addCityForm" autocomplete="off">
+        <label for="cityInput">Add city</label>
+        <input id="cityInput" list="cityList" placeholder="Start typing a city (e.g., London)" />
+        <datalist id="cityList"></datalist>
+        <button type="submit" class="btn-neutral">Add</button>
+        
+      </div>
+<div class="controls right-controls">
+
         <label>Date:
           <input type="date" id="datePicker"/>
         </label>
@@ -37,18 +51,9 @@
         </label>
 
         <button id="resetDateBtn" title="Jump to today">Today</button>
+      
       </div>
-    </div>
-  </header>
-
-  <section class="add-city">
-    <div class="maxline">
-      <form id="addCityForm" autocomplete="off">
-        <label for="cityInput">Add city</label>
-        <input id="cityInput" list="cityList" placeholder="Start typing a city (e.g., London)" />
-        <datalist id="cityList"></datalist>
-        <button type="submit" class="btn-neutral">Add</button>
-        <button id="customTzBtn" type="button" class="btn-neutral">Add with custom time zone</button>
+<button id="customTzBtn" type="button" class="btn-neutral">Add with custom time zone</button>
       </form>
     </div>
   </section>
@@ -69,7 +74,7 @@
   </template>
 
   <script>
-    window.__APP_VERSION__ = "v1.9.42";
+    window.__APP_VERSION__ = "v1.9.46";
   </script>
   <script src="app.js"></script>
 </body>

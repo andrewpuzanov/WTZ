@@ -116,7 +116,8 @@ input, select, button { font-family: inherit; }
   width: calc(var(--city-col) + (24 * var(--cell-width)) + var(--remove-col) + var(--grid-pad) + var(--grid-border-w));
   margin: 0 auto;
   padding: 12px 16px 14px;
-}
+  display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
+
 /* Bottom separator aligned to grid width only */
 .add-city .maxline::after {
   content:""; position:absolute; left:0; right:0; bottom:0;
@@ -391,3 +392,39 @@ html[data-theme="8"] { /* Sky */
   --link: #8b5e34;
   --selection: #a47148;
   --gridline: #e2d3c1;}
+
+/* v1.9.44: controls on same line as Add city */
+.add-city .maxline { display:flex; align-items:center; gap:12px; }
+.add-city .maxline .right-controls { margin-left:auto; display:flex; gap:10px; align-items:center; }
+
+/* v1.9.45: align right controls with content edge */
+:root { --content-pad: 16px; }
+
+/* Ensure the add-city row uses the same horizontal padding as the grid content */
+.add-city .maxline { padding-left: var(--content-pad); padding-right: var(--content-pad); }
+
+/* Push the controls right, but keep them inside the content edge */
+.add-city .maxline .right-controls { margin-left: auto; padding-right: 0; }
+
+/* Make the zones list container use the same pad variable if not already */
+.grid-container, .grid .rows { padding-left: var(--content-pad); padding-right: var(--content-pad); }
+
+/* v1.9.46: hard-align right controls to content edge */
+.add-city .maxline {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+}
+.add-city .maxline .add-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1 1 auto; /* occupy remaining space */
+  min-width: 0;
+}
+.add-city .maxline .right-controls {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
