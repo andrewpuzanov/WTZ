@@ -1,4 +1,4 @@
-/* World Time Zones v1.9.5 */
+/* World Time Zones v1.9.74 */
 (() => {
   const $ = (sel, root=document) => root.querySelector(sel);
   const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
@@ -133,7 +133,26 @@
     return new Date(Date.UTC(y, m-1, d, hour, 0, 0));
   }
 
-  function formatCell(dateISO, hour, tz) {
+  
+// v1.9.74 — Google Calendar helper
+function z2(n){ return String(n).padStart(2,'0'); }
+function makeGCalUrl(tz, isoDate, hour, minutes){
+  minutes = minutes || 0;
+  const y = +isoDate.slice(0,4), m = +isoDate.slice(5,7), d = +isoDate.slice(8,10);
+  let h = +hour, min = +minutes;
+  let endH = h+1, endD=d, endM=m, endY=y;
+  if (endH>=24){ endH-=24; const dt=new Date(y, m-1, d); dt.setDate(dt.getDate()+1);
+    endY=dt.getFullYear(); endM=dt.getMonth()+1; endD=dt.getDate(); }
+  const startStr = String(y)+z2(m)+z2(d)+"T"+z2(h)+z2(min)+"00";
+  const endStr   = String(endY)+z2(endM)+z2(endD)+"T"+z2(endH)+z2(min)+"00";
+  const u = new URL("https://calendar.google.com/calendar/render");
+  u.searchParams.set("action","TEMPLATE");
+  u.searchParams.set("ctz", tz);
+  u.searchParams.set("dates", startStr+"/"+endStr);
+  u.searchParams.set("text","Meeting");
+  return u.toString();
+}
+function formatCell(dateISO, hour, tz) {
     const dt = makeZoned(dateISO, hour, tz);
     const dateStr = new Intl.DateTimeFormat(undefined, { month:'short', day:'2-digit', timeZone: tz }).format(dt);
     const timeFmt = state.timeFormat === "12"
@@ -233,6 +252,20 @@
       for (let h=0; h<24; h++) {
         const hourEl = document.createElement("div");
         hourEl.className = "hour";
+        // tag hour index and click-to-calendar
+        hourEl.setAttribute('data-hour', String(h));
+        hourEl.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          const tz = row.tz;
+          const y = parseInt(hourEl.getAttribute('data-y')||'0',10);
+          const m = parseInt(hourEl.getAttribute('data-m')||'0',10);
+          const d = parseInt(hourEl.getAttribute('data-d')||'0',10);
+          const hh = parseInt(hourEl.getAttribute('data-h')||String(h),10);
+          const mm = parseInt(hourEl.getAttribute('data-min')||'0',10);
+          const url = makeGCalUrlFromParts(tz, y, m, d, hh, mm);
+          try { window.open(url, "_blank", "noopener,noreferrer"); } catch(_) { location.href = url; }
+        });
+
 
         const dLabel = document.createElement("div");
         dLabel.className = "date";
@@ -242,6 +275,17 @@
         const { dateStr, timeStr, dt } = formatCell(state.dateISO, h, row.tz);
         dLabel.textContent = dateStr;
         tLabel.textContent = timeStr;
+        // expose precise local date/time for this cell (used by GCal integration)
+        try {
+          const parts = new Intl.DateTimeFormat('en-CA', { timeZone: row.tz, year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', hour12:false }).formatToParts(dt);
+          const map = Object.fromEntries(parts.map(p => [p.type, p.value]));
+          hourEl.setAttribute('data-y', map.year);
+          hourEl.setAttribute('data-m', map.month);
+          hourEl.setAttribute('data-d', map.day);
+          hourEl.setAttribute('data-h', map.hour);
+          hourEl.setAttribute('data-min', map.minute || '0');
+        } catch(e) {}
+
 
         // Day (08–18) vs Night coloring per city
         try {
@@ -474,7 +518,7 @@ tl.appendChild(hourEl);
 
 
 
-// v1.9.56 — DOM-first Follow the Sun (east → west) that does NOT depend on state
+// v1.9.74 — DOM-first Follow the Sun (east → west) that does NOT depend on state
 (function(){
   function parseOffset(txt){
     // Accept "UTC+5", "UTC+05:30", "GMT-3", etc.
@@ -565,7 +609,7 @@ tl.appendChild(hourEl);
   })();
 })();
 
-// v1.9.61 — persist current DOM order (state + cookie fallback)
+// v1.9.74 — persist current DOM order (state + cookie fallback)
 function _wtb_syncOrderFromDOM(){
   try{
     var container = document.getElementById('timeGrid') ||
@@ -608,7 +652,7 @@ function _wtb_syncOrderFromDOM(){
 }
 
 
-// v1.9.62 — explicit order save & restore
+// v1.9.74 — explicit order save & restore
 (function(){
   function _wtb_rowKeyFromObj(o){
     var label=(o && (o.city||o.label||'')).toLowerCase();
@@ -683,7 +727,7 @@ function _wtb_syncOrderFromDOM(){
 })();
 
 
-// v1.9.67 — ultra-direct order persistence (label-based), DOM-first
+// v1.9.74 — ultra-direct order persistence (label-based), DOM-first
 (function(){
   function container(){
     return document.getElementById('timeGrid') ||
@@ -759,3 +803,44 @@ function _wtb_syncOrderFromDOM(){
   // Always save after Follow Sun sorts, if hook exists
   window._wtb_saveOrderLabels = function(){ writeOrder(readDomOrderLabels()); };
 })();
+
+
+// v1.9.74 — robust Google Calendar helpers
+function z2(n){ return String(n).padStart(2,'0'); }
+function makeGCalUrlFromParts(tz, y, m, d, h, min){
+  min = min||0;
+  let endH=h+1, endD=d, endM=m, endY=y;
+  if (endH>=24){ endH-=24; const dt=new Date(y, m-1, d); dt.setDate(dt.getDate()+1);
+    endY=dt.getFullYear(); endM=dt.getMonth()+1; endD=dt.getDate(); }
+  const startStr = String(y)+z2(m)+z2(d)+"T"+z2(h)+z2(min)+"00";
+  const endStr   = String(endY)+z2(endM)+z2(endD)+"T"+z2(endH)+z2(min)+"00";
+  const u = new URL("https://calendar.google.com/calendar/render");
+  u.searchParams.set("action","TEMPLATE");
+  u.searchParams.set("ctz", tz);
+  u.searchParams.set("dates", startStr+"/"+endStr);
+  u.searchParams.set("text", "Meeting");
+  return u.toString();
+}
+const _WTB_MONTHS = {jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+function parseCellDateTime(cell, fallbackISO){
+  // cell text usually like "Sep 18\n08:00" or "Sep 17 08:00"
+  const txt = (cell.textContent||"").replace(/\s+/g,' ').trim();
+  const m = txt.match(/([A-Za-z]{3})\s+(\d{1,2}).*?(\d{1,2}):(\d{2})/);
+  let year;
+  if (fallbackISO && /^\d{4}-\d{2}-\d{2}$/.test(fallbackISO)){
+    year = +fallbackISO.slice(0,4);
+  } else {
+    const d=new Date(); year=d.getFullYear();
+  }
+  if (m){
+    const mon = _WTB_MONTHS[m[1].toLowerCase()]||1;
+    const day = +m[2];
+    const hour= +m[3], min= +m[4];
+    return {y:year, m:mon, d:day, h:hour, min:min};
+  }
+  // fallback: use fallbackISO date and data-hour
+  const hr = parseInt(cell.getAttribute('data-hour')||"0",10);
+  const y = +fallbackISO.slice(0,4), mo=+fallbackISO.slice(5,7), da=+fallbackISO.slice(8,10);
+  return {y:y, m:mo, d:da, h:hr, min:0};
+}
+
