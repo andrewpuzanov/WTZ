@@ -1,4 +1,4 @@
-/* World Time Zones v1.9.2 */
+/* World Time Zones v1.9.5 */
 (() => {
   const $ = (sel, root=document) => root.querySelector(sel);
   const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
@@ -80,6 +80,7 @@
   const themeSelect = $("#themeSelect");
   const customTzBtn = $("#customTzBtn");
 
+  // Storage
   const STORAGE_KEY = "wtb_lite_state";
   const storage = {
     get() {
@@ -98,6 +99,7 @@
     }
   };
 
+  // State
   let state = {
     dateISO: toISODate(new Date()),
     rows: [],
@@ -109,7 +111,12 @@
   function persist() { storage.set({ version: window.__APP_VERSION__, ...state }); }
   function loadPersisted() { const obj = storage.get(); if (obj) state = { ...state, ...obj }; }
 
-  function toISODate(d) { return d.toISOString().slice(0,10); }
+  function toISODate(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    return `${y}-${m}-${day}`;
+  }
 
   function applyTheme(index) { document.documentElement.setAttribute("data-theme", String(index)); }
 
@@ -133,7 +140,7 @@
       ? new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute:'2-digit', hour12: true, timeZone: tz })
       : new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute:'2-digit', hour12: false, timeZone: tz });
     const timeStr = timeFmt.format(dt);
-    return { dateStr, timeStr };
+    return { dateStr, timeStr, dt };
   }
 
   function getCellWidth() {
@@ -232,13 +239,23 @@
         const tLabel = document.createElement("div");
         tLabel.className = "time";
 
-        const { dateStr, timeStr } = formatCell(state.dateISO, h, row.tz);
+        const { dateStr, timeStr, dt } = formatCell(state.dateISO, h, row.tz);
         dLabel.textContent = dateStr;
         tLabel.textContent = timeStr;
 
+        // Day (08–18) vs Night coloring per city
+        try {
+          const localHour = parseInt(new Intl.DateTimeFormat('en-US', { hour: '2-digit', hour12: false, timeZone: row.tz }).format(dt), 10);
+          hourEl.classList.add((localHour >= 8 && localHour <= 18) ? "day" : "night");
+        } catch(_) {}
+
         hourEl.appendChild(dLabel);
         hourEl.appendChild(tLabel);
-        tl.appendChild(hourEl);
+        try {
+  const localHour = parseInt(new Intl.DateTimeFormat('en-US', { hour: '2-digit', hour12: false, timeZone: row.tz }).format(dt), 10);
+  hourEl.classList.add((localHour >= 8 && localHour <= 18) ? 'day' : 'night');
+} catch (e) { hourEl.classList.add('night'); }
+tl.appendChild(hourEl);
       }
 
       // Mouse-driven focus
@@ -432,6 +449,7 @@
 
   function init() {
     loadPersisted();
+    if (!Number.isInteger(state.theme) || state.theme < 0 || state.theme > 8) { state.theme = 6; }
     refreshCityDatalist();
     applyTheme(state.theme);
 

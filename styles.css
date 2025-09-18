@@ -64,11 +64,6 @@ html[data-theme="6"] { /* Sky */
   --hour-alt:#dfeaff;
   --focus:#2b8aef;
 }
-html[data-theme="7"] { /* Paper */
-  --bg:#ffffff; --panel:#ffffff; --panel-2:#f7f7f7; --text:#141414; --muted:#6a6a6a;
-  --accent:#111827; --accent-2:#16a34a; --grid-border:#e5e5e5; --hour-alt:#f3f3f3; --focus:#111827;
-}
-
 * { box-sizing: border-box; }
 html, body { margin:0; padding:0; height:100%; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; }
 
@@ -246,3 +241,153 @@ input, select, button { font-family: inherit; }
     line-height: 1.1;
     font-weight: bold;
 }
+
+
+/* === v1.9.5 overrides === */
+
+/* Keep custom TZ button hidden */
+#customTzBtn { display: none !important; }
+
+/* Narrower remove column to fit the smaller button */
+:root {
+  --remove-col: 40px !important;
+  --remove-x: 12px;              /* cross size */
+  --remove-btn: calc(var(--remove-x) * 2); /* button box ~2x cross */
+}
+
+/* Row grid order: City | Remove | Timeline */
+.row { grid-template-columns: var(--city-col) var(--remove-col) calc(24 * var(--cell-width)) !important; }
+
+/* No divider between city and remove button */
+.row-header { border-right: none !important; }
+
+/* City name ~20% smaller */
+.row-header .city-name { font-size: 0.8em !important; }
+
+/* Remove button sized box, centered; keep border width same on hover */
+.remove-row {
+  width: var(--remove-btn);
+  height: var(--remove-btn);
+  place-self: center;                 /* center inside the remove column cell */
+  background: transparent;
+  border: 0.75px solid var(--grid-border);
+  border-radius: 10px;
+  color: var(--accent);
+  font-size: var(--remove-x);
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease, color .15s ease;
+}
+.remove-row:hover { color: var(--danger); box-shadow: 0 0 0 1px rgba(90,161,255,.25); }
+
+/* Disable alternating backgrounds & their special borders */
+.timeline .hour,
+.timeline .hour:nth-child(odd) {
+  background: transparent !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}
+
+/* Day/Night coloring using existing theme tokens */
+:root { --hour-day: var(--panel-2); --hour-night: var(--hour-alt); }
+
+/* Dark themes: day lighter, night darker */
+html[data-theme="0"],
+html[data-theme="1"],
+html[data-theme="2"],
+html[data-theme="3"] {
+  --hour-day: var(--panel-2);
+  --hour-night: var(--hour-alt);
+}
+
+/* Light themes: day = hour-alt (lighter), night = panel-2 (slightly darker) */
+html[data-theme="4"],
+html[data-theme="5"],
+html[data-theme="6"],
+/* Apply */
+.hour.day  { background: var(--hour-day) !important; }
+.hour.night{ background: var(--hour-night) !important; }
+
+/* Keep drag-handle cursor */
+.row-header { cursor: grab; user-select: none; }
+.row-header:active { cursor: grabbing; }
+
+/* === v1.9.13: map day/night backgrounds to theme tokens and enforce === */
+:root, html[data-theme]{
+  /* Use the theme's existing hour colors */
+  --hour-day: var(--hour);
+  --hour-night: var(--hour-alt);
+}
+.grid .row .timeline .hour.day   { background: var(--hour-day) !important; }
+.grid .row .timeline .hour.night { background: var(--hour-night) !important; }
+
+/* === v1.9.19: dark themes swap (day=light, night=dark), light themes unchanged === */
+html[data-theme="0"] .grid .row .timeline .hour.day,
+html[data-theme="1"] .grid .row .timeline .hour.day,
+html[data-theme="2"] .grid .row .timeline .hour.day,
+html[data-theme="3"] .grid .row .timeline .hour.day { background: var(--hour-alt) !important; }
+
+html[data-theme="0"] .grid .row .timeline .hour.night,
+html[data-theme="1"] .grid .row .timeline .hour.night,
+html[data-theme="2"] .grid .row .timeline .hour.night,
+html[data-theme="3"] .grid .row .timeline .hour.night { background: var(--hour) !important; }
+
+/* === v1.9.21: color-value tweaks only === */
+html[data-theme="0"] .grid .row .timeline .hour.day { background: #5a6175 !important; }
+html[data-theme="1"] .grid .row .timeline .hour.day { background: #6d5f75 !important; }
+html[data-theme="2"] .grid .row .timeline .hour.day { background: #5a6860 !important; }
+html[data-theme="4"] .grid .row .timeline .hour.day { background: var(--hour-alt) !important; }
+html[data-theme="4"] .grid .row .timeline .hour.night { background: #c2c4c8 !important; }
+html[data-theme="5"] .grid .row .timeline .hour.day { background: var(--hour-alt) !important; }
+html[data-theme="5"] .grid .row .timeline .hour.night { background: #ccc5b8 !important; }
+
+/* === v1.9.28: Mono only — day color = lighten(panel-2, 30%) = #585858 === */
+html[data-theme="3"] .grid .row .timeline .hour.day { background: #585858 !important; }
+
+/* v1.9.37: Paper only — night (dark) cells 10% darker */
+
+/* v1.9.38: add Fuchsia (7) and Wood (8); remove Paper */
+html[data-theme="7"] { /* Sky */
+  --bg: #fbe7ff;
+  --panel: #f6d7ff;
+  --panel-2: #f6d7ff;
+  --text: #1f2937;
+  --muted: #6b4b66;
+  --accent: #d946ef;
+  --accent-2:#22b8cf;
+  --grid-border: #e4c8fb;
+  --hour-alt: #f1d0ff;
+  --focus: #d946ef;
+
+  --accent-contrast: #ffffff;
+
+  --panel-1: #ffffff;
+  --hour: #fae8ff;
+  --focus-ring: #d946ef;
+  --outline: #e5b6fa;
+  --link: #d946ef;
+  --selection: #e879f9;
+  --gridline: #edd6fb;}
+html[data-theme="8"] { /* Sky */
+  --bg: #faf0e4;
+  --panel: #ead8c2;
+  --panel-2: #ead8c2;
+  --text: #1f2937;
+  --muted: #6a5746;
+  --accent: #8b5e34;
+  --accent-2:#22b8cf;
+  --grid-border: #d6c2ab;
+  --hour-alt: #dec5a6;
+  --focus: #8b5e34;
+
+  --accent-contrast: #ffffff;
+
+  --panel-1: #ffffff;
+  --hour: #f3e9dc;
+  --focus-ring: #8b5e34;
+  --outline: #d9c5aa;
+  --link: #8b5e34;
+  --selection: #a47148;
+  --gridline: #e2d3c1;}

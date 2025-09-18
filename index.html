@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>World Time Zones v1.9.2</title>
+  <title>World Time Zones v1.9.42</title>
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
   <header class="app-header">
     <div class="maxline header-inner">
       <div class="title-wrap">
-        <h1>World Time Zones <small>v1.9.2</small></h1>
+        <h1>World Time Zones <small>v1.9.42</small></h1>
       </div>
       <div class="controls">
         <label>Date:
@@ -28,13 +28,12 @@
           <select id="themeSelect">
             <option value="0">Midnight (dark)</option>
             <option value="1">Dawn (dark)</option>
-            <option value="2">Solar (dark)</option>
+            <option value="2">Forest (dark)</option>
             <option value="3">Mono (dark)</option>
             <option value="4">Pearl (light)</option>
             <option value="5">Sand (light)</option>
             <option value="6">Sky (light)</option>
-            <option value="7">Paper (light)</option>
-          </select>
+            <option value="7">Fuchsia (light)</option><option value="8">Wood (light)</option></select>
         </label>
 
         <button id="resetDateBtn" title="Jump to today">Today</button>
@@ -64,13 +63,13 @@
         <div class="city-name"></div>
         <div class="city-sub"></div>
       </div>
-      <div class="timeline" tabindex="0" role="grid"></div>
       <button class="remove-row" title="Remove city" aria-label="Remove">✕</button>
+      <div class="timeline" tabindex="0" role="grid"></div>
     </div>
   </template>
 
   <script>
-    window.__APP_VERSION__ = "v1.9.2";
+    window.__APP_VERSION__ = "v1.9.42";
   </script>
   <script src="app.js"></script>
 </body>
