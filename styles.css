@@ -454,3 +454,6 @@ html[data-theme="8"] { /* Sky */
 .theme-dark .hour:hover::after,
 .theme-dark .hour:focus-visible::after{ opacity:0.7; }
 
+
+/* v1.9.81 */
+.your-zone-flag{ color: var(--text); }

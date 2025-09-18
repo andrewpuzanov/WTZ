@@ -1,4 +1,5 @@
-/* World Time Zones v1.9.76 */
+/* World Time Zones v1.9.82 */
+const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone)||'UTC';
 (() => {
   const $ = (sel, root=document) => root.querySelector(sel);
   const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
@@ -133,8 +134,18 @@
     return new Date(Date.UTC(y, m-1, d, hour, 0, 0));
   }
 
+  // v1.9.82 — produce a comparable GMT offset token for a zone on a given date
+  function offsetToken(dateISO, tz){
+    try{
+      const dt = makeZoned(dateISO, 12, tz);
+      const parts = new Intl.DateTimeFormat('en-US', { timeZone: tz, timeZoneName: 'shortOffset', year:'numeric', month:'short', day:'2-digit' }).formatToParts(dt);
+      const token = parts.find(p => p.type === 'timeZoneName')?.value || '';
+      return token;
+    }catch(e){ return ''; }
+  }
+
   
-// v1.9.76 — Google Calendar helper
+// v1.9.82 — Google Calendar helper
 function z2(n){ return String(n).padStart(2,'0'); }
 function makeGCalUrl(tz, isoDate, hour, minutes){
   minutes = minutes || 0;
@@ -247,7 +258,21 @@ function formatCell(dateISO, hour, tz) {
       node.setAttribute("data-index", String(idx));
       $(".city-name", node).textContent = row.city;
       $(".city-sub", node).textContent = labelForRowSub(state.dateISO, row.tz);
-      const tl = $(".timeline", node);
+      
+      // v1.9.82 - mark local machine zone
+      try {
+        const subEl = $(".city-sub", node);
+        if (subEl && (String(row.tz).toLowerCase() === String(LOCAL_TZ||'').toLowerCase() || offsetToken(state.dateISO, row.tz) === offsetToken(state.dateISO, LOCAL_TZ))) {
+          // prevent duplicates
+          if (!subEl.querySelector('.your-zone-flag')) {
+            const strong = document.createElement('strong');
+            strong.className = 'your-zone-flag';
+            strong.textContent = ' (your zone)';
+            subEl.appendChild(strong);
+          }
+        }
+      } catch(_) {}
+const tl = $(".timeline", node);
 
       for (let h=0; h<24; h++) {
         const hourEl = document.createElement("div");
@@ -518,7 +543,7 @@ tl.appendChild(hourEl);
 
 
 
-// v1.9.76 — DOM-first Follow the Sun (east → west) that does NOT depend on state
+// v1.9.82 — DOM-first Follow the Sun (east → west) that does NOT depend on state
 (function(){
   function parseOffset(txt){
     // Accept "UTC+5", "UTC+05:30", "GMT-3", etc.
@@ -609,7 +634,7 @@ tl.appendChild(hourEl);
   })();
 })();
 
-// v1.9.76 — persist current DOM order (state + cookie fallback)
+// v1.9.82 — persist current DOM order (state + cookie fallback)
 function _wtb_syncOrderFromDOM(){
   try{
     var container = document.getElementById('timeGrid') ||
@@ -652,7 +677,7 @@ function _wtb_syncOrderFromDOM(){
 }
 
 
-// v1.9.76 — explicit order save & restore
+// v1.9.82 — explicit order save & restore
 (function(){
   function _wtb_rowKeyFromObj(o){
     var label=(o && (o.city||o.label||'')).toLowerCase();
@@ -727,7 +752,7 @@ function _wtb_syncOrderFromDOM(){
 })();
 
 
-// v1.9.76 — ultra-direct order persistence (label-based), DOM-first
+// v1.9.82 — ultra-direct order persistence (label-based), DOM-first
 (function(){
   function container(){
     return document.getElementById('timeGrid') ||
@@ -805,7 +830,7 @@ function _wtb_syncOrderFromDOM(){
 })();
 
 
-// v1.9.76 — robust Google Calendar helpers
+// v1.9.82 — robust Google Calendar helpers
 function z2(n){ return String(n).padStart(2,'0'); }
 function makeGCalUrlFromParts(tz, y, m, d, h, min){
   min = min||0;
