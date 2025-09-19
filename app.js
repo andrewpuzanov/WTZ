@@ -1,4 +1,5 @@
-/* World Time Zones v1.9.82 */
+const APP_VERSION = "v1.9.112";
+/* World Time Zones v1.9.85 */
 const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone)||'UTC';
 (() => {
   const $ = (sel, root=document) => root.querySelector(sel);
@@ -67,7 +68,35 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone)||'UTC';
     "Anchorage, USA": "America/Anchorage",
     "Phoenix, USA": "America/Phoenix",
     "Reykjavik, Iceland": "Atlantic/Reykjavik"
-  };
+  ,
+    "Cherkasy": "Europe/Kyiv",
+    "Chernihiv": "Europe/Kyiv",
+    "Chernivtsi": "Europe/Kyiv",
+    "Dnipro": "Europe/Kyiv",
+    "Donetsk": "Europe/Kyiv",
+    "Ivano-Frankivsk": "Europe/Kyiv",
+    "Kharkiv": "Europe/Kyiv",
+    "Kherson": "Europe/Kyiv",
+    "Khmelnytskyi": "Europe/Kyiv",
+    "Kropyvnytskyi (Kirovohrad Oblast)": "Europe/Kyiv",
+    "Kyiv": "Europe/Kyiv",
+    "Luhansk": "Europe/Kyiv",
+    "Lutsk (Volyn Oblast)": "Europe/Kyiv",
+    "Lviv": "Europe/Kyiv",
+    "Mykolaiv": "Europe/Kyiv",
+    "Odesa": "Europe/Kyiv",
+    "Poltava": "Europe/Kyiv",
+    "Rivne": "Europe/Kyiv",
+    "Sumy": "Europe/Kyiv",
+    "Ternopil": "Europe/Kyiv",
+    "Uzhhorod (Zakarpattia Oblast)": "Europe/Kyiv",
+    "Vinnytsia": "Europe/Kyiv",
+    "Zaporizhzhia": "Europe/Kyiv",
+    "Zhytomyr": "Europe/Kyiv",
+    "Simferopol": "Europe/Simferopol",
+    "Seattle": "America/Los_Angeles",
+    "Seattle, USA": "America/Los_Angeles"
+};
 
   // DOM
   const grid = $("#timeGrid");
@@ -134,7 +163,7 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone)||'UTC';
     return new Date(Date.UTC(y, m-1, d, hour, 0, 0));
   }
 
-  // v1.9.82 — produce a comparable GMT offset token for a zone on a given date
+  // v1.9.85 — produce a comparable GMT offset token for a zone on a given date
   function offsetToken(dateISO, tz){
     try{
       const dt = makeZoned(dateISO, 12, tz);
@@ -145,7 +174,7 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone)||'UTC';
   }
 
   
-// v1.9.82 — Google Calendar helper
+// v1.9.85 — Google Calendar helper
 function z2(n){ return String(n).padStart(2,'0'); }
 function makeGCalUrl(tz, isoDate, hour, minutes){
   minutes = minutes || 0;
@@ -256,13 +285,15 @@ function formatCell(dateISO, hour, tz) {
     state.rows.forEach((row, idx) => {
       const node = rowTemplate.content.firstElementChild.cloneNode(true);
       node.setAttribute("data-index", String(idx));
+      //node.classList.toggle('hour night', true);
       $(".city-name", node).textContent = row.city;
       $(".city-sub", node).textContent = labelForRowSub(state.dateISO, row.tz);
       
-      // v1.9.82 - mark local machine zone
+      // v1.9.85 - mark local machine zone
       try {
         const subEl = $(".city-sub", node);
-        if (subEl && (String(row.tz).toLowerCase() === String(LOCAL_TZ||'').toLowerCase() || offsetToken(state.dateISO, row.tz) === offsetToken(state.dateISO, LOCAL_TZ))) {
+        var isYourZone = (String(row.tz).toLowerCase() === String(LOCAL_TZ||'').toLowerCase()) || (offsetToken(state.dateISO, row.tz) === offsetToken(state.dateISO, LOCAL_TZ));
+        if (subEl && isYourZone) {
           // prevent duplicates
           if (!subEl.querySelector('.your-zone-flag')) {
             const strong = document.createElement('strong');
@@ -270,6 +301,13 @@ function formatCell(dateISO, hour, tz) {
             strong.textContent = ' (your zone)';
             subEl.appendChild(strong);
           }
+        }
+        node.classList.toggle('is-your-zone', isYourZone);
+
+        if (isYourZone)
+        {
+            $(".remove-div", node).classList.toggle('row-zone-remove', true);
+            $(".row-header", node).classList.toggle('row-zone-remove', true);
         }
       } catch(_) {}
 const tl = $(".timeline", node);
@@ -321,9 +359,11 @@ const tl = $(".timeline", node);
         hourEl.appendChild(dLabel);
         hourEl.appendChild(tLabel);
         try {
-  const localHour = parseInt(new Intl.DateTimeFormat('en-US', { hour: '2-digit', hour12: false, timeZone: row.tz }).format(dt), 10);
-  hourEl.classList.add((localHour >= 8 && localHour <= 18) ? 'day' : 'night');
-} catch (e) { hourEl.classList.add('night'); }
+            const localHour = parseInt(new Intl.DateTimeFormat('en-US', { hour: '2-digit', hour12: false, timeZone: row.tz }).format(dt), 10);
+            hourEl.classList.add((localHour >= 8 && localHour <= 18) ? 'day' : 'night');
+        } catch (e) {
+            hourEl.classList.add('night');
+           }
 tl.appendChild(hourEl);
       }
 
@@ -543,7 +583,7 @@ tl.appendChild(hourEl);
 
 
 
-// v1.9.82 — DOM-first Follow the Sun (east → west) that does NOT depend on state
+// v1.9.85 — DOM-first Follow the Sun (east → west) that does NOT depend on state
 (function(){
   function parseOffset(txt){
     // Accept "UTC+5", "UTC+05:30", "GMT-3", etc.
@@ -634,7 +674,7 @@ tl.appendChild(hourEl);
   })();
 })();
 
-// v1.9.82 — persist current DOM order (state + cookie fallback)
+// v1.9.85 — persist current DOM order (state + cookie fallback)
 function _wtb_syncOrderFromDOM(){
   try{
     var container = document.getElementById('timeGrid') ||
@@ -677,7 +717,7 @@ function _wtb_syncOrderFromDOM(){
 }
 
 
-// v1.9.82 — explicit order save & restore
+// v1.9.85 — explicit order save & restore
 (function(){
   function _wtb_rowKeyFromObj(o){
     var label=(o && (o.city||o.label||'')).toLowerCase();
@@ -752,7 +792,7 @@ function _wtb_syncOrderFromDOM(){
 })();
 
 
-// v1.9.82 — ultra-direct order persistence (label-based), DOM-first
+// v1.9.85 — ultra-direct order persistence (label-based), DOM-first
 (function(){
   function container(){
     return document.getElementById('timeGrid') ||
@@ -830,7 +870,7 @@ function _wtb_syncOrderFromDOM(){
 })();
 
 
-// v1.9.82 — robust Google Calendar helpers
+// v1.9.85 — robust Google Calendar helpers
 function z2(n){ return String(n).padStart(2,'0'); }
 function makeGCalUrlFromParts(tz, y, m, d, h, min){
   min = min||0;

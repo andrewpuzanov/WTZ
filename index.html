@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>World Time Zones v1.9.82</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <title>World Time Zones v1.9.112</title>
+  <link rel="stylesheet" href="styles.css?v=1.9.112"/>
 </head>
 <body>
   <header class="app-header">
     <div class="maxline header-inner">
       <div class="title-wrap">
-        <h1>World Time Zones <small>v1.9.82</small></h1>
+        <h1>World Time Zones <small>v1.9.112</small></h1>
       </div>
       
     </div>
@@ -47,7 +47,8 @@
             <option value="4">Pearl (light)</option>
             <option value="5">Sand (light)</option>
             <option value="6">Sky (light)</option>
-            <option value="7">Fuchsia (light)</option><option value="8">Wood (light)</option></select>
+            <option value="7">Fuchsia (light)</option>
+            <option value="8">Wood (light)</option></select>
         </label>
 
         <button id="resetDateBtn" title="Jump to today">Today</button>
@@ -68,14 +69,17 @@
         <div class="city-name"></div>
         <div class="city-sub"></div>
       </div>
-      <button class="remove-row" title="Remove city" aria-label="Remove">✕</button>
+      <!--<div class="hour night">-->
+      <div class="remove-div">
+          <button class="remove-row" title="Remove city" aria-label="Remove">✕</button>
+      </div>
       <div class="timeline" tabindex="0" role="grid"></div>
     </div>
   </template>
 
   <script>
-    window.__APP_VERSION__ = "v1.9.82";
+    window.__APP_VERSION__ = "v1.9.112";
   </script>
-  <script src="app.js"></script>
+  <script src="app.js?v=1.9.112"></script>
 </body>
 </html>

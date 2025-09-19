@@ -27,45 +27,109 @@
 
 /* DARK THEMES */
 html[data-theme="0"] {
-  --bg:#0b1020; --panel:#121a32; --panel-2:#0f162b; --text:#e8eefc; --muted:#aab6d3;
-  --accent:#5aa1ff; --accent-2:#9be37d; --grid-border:#1f2742; --hour-alt:#141d3a; --focus:#1bd1ff;
+    --bg: #0b1020;
+    --panel: #121a32;
+    --panel-2: #0f162b;
+    --text: #e8eefc;
+    --muted: #aab6d3;
+    --accent: #5aa1ff;
+    --accent-2: #9be37d;
+    --grid-border: #1f2742;
+    --hour-alt: #141d3a;
+    --focus: #1bd1ff;
 }
+
 html[data-theme="1"] {
-  --bg:#1b0f22; --panel:#2a1934; --panel-2:#241530; --text:#ffeef8; --muted:#e9cfe3;
-  --accent:#ff86c8; --accent-2:#ffd166; --grid-border:#3a2147; --hour-alt:#2e1b3a; --focus:#ff9dd6;
+    --bg: #1b0f22;
+    --panel: #2a1934;
+    --panel-2: #241530;
+    --text: #ffeef8;
+    --muted: #e9cfe3;
+    --accent: #ff86c8;
+    --accent-2: #ffd166;
+    --grid-border: #3a2147;
+    --hour-alt: #2e1b3a;
+    --focus: #ff9dd6;
 }
+
 html[data-theme="2"] {
-  --bg:#0b1b10; --panel:#0f2516; --panel-2:#0c1f13; --text:#e9ffe9; --muted:#bfe6c7;
-  --accent:#7df9a3; --accent-2:#6ac2ff; --grid-border:#163022; --hour-alt:#13281c; --focus:#8cffbf;
+    --bg: #0b1b10;
+    --panel: #0f2516;
+    --panel-2: #0c1f13;
+    --text: #e9ffe9;
+    --muted: #bfe6c7;
+    --accent: #7df9a3;
+    --accent-2: #6ac2ff;
+    --grid-border: #163022;
+    --hour-alt: #13281c;
+    --focus: #8cffbf;
 }
+
 html[data-theme="3"] {
-  --bg:#0c0c0c; --panel:#141414; --panel-2:#111; --text:#f0f0f0; --muted:#bbb;
-  --accent:#8ad; --accent-2:#ddd; --grid-border:#222; --hour-alt:#171717; --focus:#aaa;
+    --bg: #0c0c0c;
+    --panel: #141414;
+    --panel-2: #111;
+    --text: #f0f0f0;
+    --muted: #bbb;
+    --accent: #8ad;
+    --accent-2: #ddd;
+    --grid-border: #222;
+    --hour-alt: #171717;
+    --focus: #aaa;
 }
 
 /* LIGHT THEMES */
 html[data-theme="4"] { /* Pearl */
-  --bg:#f7f8fb; --panel:#ffffff; --panel-2:#f3f5fa; --text:#1d2433; --muted:#5b6b85;
-  --accent:#3a7bff; --accent-2:#2f9e44; --grid-border:#d9e0ee; --hour-alt:#eef1f8; --focus:#3a7bff;
+    --bg: #f7f8fb;
+    --panel: #ffffff;
+    --panel-2: #f3f5fa;
+    --text: #1d2433;
+    --muted: #5b6b85;
+    --accent: #3a7bff;
+    --accent-2: #2f9e44;
+    --grid-border: #d9e0ee;
+    --hour-alt: #eef1f8;
+    --focus: #3a7bff;
 }
+
 html[data-theme="5"] { /* Sand */
-  --bg:#fbf7f1; --panel:#fffaf2; --panel-2:#fff6e6; --text:#2a2430; --muted:#6b6153;
-  --accent:#e09f3e; --accent-2:#3a86ff; --grid-border:#eadfcd; --hour-alt:#f8eedf; --focus:#e09f3e;
+    --bg: #fbf7f1;
+    --panel: #fffaf2;
+    --panel-2: #fff6e6;
+    --text: #2a2430;
+    --muted: #6b6153;
+    --accent: #e09f3e;
+    --accent-2: #3a86ff;
+    --grid-border: #eadfcd;
+    --hour-alt: #f8eedf;
+    --focus: #e09f3e;
 }
+
 html[data-theme="6"] { /* Sky */
-  --bg:#eaf2ff;
-  --panel:#f9fbff;
-  --panel-2:#e2edff;
-  --text:#122033;
-  --muted:#4b5d78;
-  --accent:#2b8aef;
-  --accent-2:#22b8cf;
-  --grid-border:#c7dcff;
-  --hour-alt:#dfeaff;
-  --focus:#2b8aef;
+    --bg: #eaf2ff;
+    --panel: #f9fbff;
+    --panel-2: #e2edff;
+    --text: #122033;
+    --muted: #4b5d78;
+    --accent: #2b8aef;
+    --accent-2: #22b8cf;
+    --grid-border: #c7dcff;
+    --hour-alt: #dfeaff;
+    --focus: #2b8aef;
 }
-* { box-sizing: border-box; }
-html, body { margin:0; padding:0; height:100%; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; }
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
 
 /* Normalize form controls font */
 input, select, button { font-family: inherit; }
@@ -169,23 +233,6 @@ input, select, button { font-family: inherit; }
 }
 .row:last-child { border-bottom: none; }
 
-/* Drag & drop visuals */
-.row.dragging { opacity: .7; }
-.row.drop-before { box-shadow: 0 -2px 0 0 var(--accent); }
-.row.drop-after  { box-shadow: 0  2px 0 0 var(--accent); }
-
-.row-header {
-  padding: 10px 12px;
-  display:flex; flex-direction: column; justify-content:center; gap: 4px;
-  border-right: 1px solid var(--grid-border);
-  cursor: pointer;               /* "hand" on hover */
-  user-select: none;
-}
-.row-header[draggable="true"] { cursor: grab; }
-.row-header[draggable="true"]:active { cursor: grabbing; }
-
-.city-name { font-weight:700; }
-.city-sub { font-size:12px; color: var(--muted); }
 
 /* Remove button */
 .remove-row {
@@ -328,21 +375,38 @@ html[data-theme="6"],
 html[data-theme="0"] .grid .row .timeline .hour.day,
 html[data-theme="1"] .grid .row .timeline .hour.day,
 html[data-theme="2"] .grid .row .timeline .hour.day,
-html[data-theme="3"] .grid .row .timeline .hour.day { background: var(--hour-alt) !important; }
+html[data-theme="3"] .grid .row .timeline .hour.day {
+    background: var(--hour-alt) !important;
+}
 
+html[data-theme="0"] .row-zone-remove,
+html[data-theme="1"] .row-zone-remove,
+html[data-theme="2"] .row-zone-remove,
+html[data-theme="3"] .row-zone-remove,
 html[data-theme="0"] .grid .row .timeline .hour.night,
 html[data-theme="1"] .grid .row .timeline .hour.night,
 html[data-theme="2"] .grid .row .timeline .hour.night,
-html[data-theme="3"] .grid .row .timeline .hour.night { background: var(--hour) !important; }
+html[data-theme="3"] .grid .row .timeline .hour.night {
+    background: var(--hour) !important;
+}
 
 /* === v1.9.21: color-value tweaks only === */
 html[data-theme="0"] .grid .row .timeline .hour.day { background: #5a6175 !important; }
 html[data-theme="1"] .grid .row .timeline .hour.day { background: #6d5f75 !important; }
 html[data-theme="2"] .grid .row .timeline .hour.day { background: #5a6860 !important; }
 html[data-theme="4"] .grid .row .timeline .hour.day { background: var(--hour-alt) !important; }
-html[data-theme="4"] .grid .row .timeline .hour.night { background: #c2c4c8 !important; }
+
+html[data-theme="4"] .row-zone-remove,
+html[data-theme="4"] .grid .row .timeline .hour.night {
+    background: #c2c4c8 !important;
+}
+
 html[data-theme="5"] .grid .row .timeline .hour.day { background: var(--hour-alt) !important; }
-html[data-theme="5"] .grid .row .timeline .hour.night { background: #ccc5b8 !important; }
+
+html[data-theme="5"] .row-zone-remove,
+html[data-theme="5"] .grid .row .timeline .hour.night {
+    background: #ccc5b8 !important;
+}
 
 /* === v1.9.28: Mono only — day color = lighten(panel-2, 30%) = #585858 === */
 html[data-theme="3"] .grid .row .timeline .hour.day { background: #585858 !important; }
@@ -350,48 +414,47 @@ html[data-theme="3"] .grid .row .timeline .hour.day { background: #585858 !impor
 /* v1.9.37: Paper only — night (dark) cells 10% darker */
 
 /* v1.9.38: add Fuchsia (7) and Wood (8); remove Paper */
-html[data-theme="7"] { /* Sky */
-  --bg: #fbe7ff;
-  --panel: #f6d7ff;
-  --panel-2: #f6d7ff;
-  --text: #1f2937;
-  --muted: #6b4b66;
-  --accent: #d946ef;
-  --accent-2:#22b8cf;
-  --grid-border: #e4c8fb;
-  --hour-alt: #f1d0ff;
-  --focus: #d946ef;
+html[data-theme="7"] { /* Fuchsia */
+    --bg: #fbe7ff;
+    --panel: #f6d7ff;
+    --panel-2: #f6d7ff;
+    --text: #1f2937;
+    --muted: #6b4b66;
+    --accent: #d946ef;
+    --accent-2: #22b8cf;
+    --grid-border: #e4c8fb;
+    --hour-alt: #f1d0ff;
+    --focus: #d946ef;
+    --accent-contrast: #ffffff;
+    --panel-1: #ffffff;
+    --hour: #fae8ff;
+    --focus-ring: #d946ef;
+    --outline: #e5b6fa;
+    --link: #d946ef;
+    --selection: #e879f9;
+    --gridline: #edd6fb;
+}
 
-  --accent-contrast: #ffffff;
-
-  --panel-1: #ffffff;
-  --hour: #fae8ff;
-  --focus-ring: #d946ef;
-  --outline: #e5b6fa;
-  --link: #d946ef;
-  --selection: #e879f9;
-  --gridline: #edd6fb;}
-html[data-theme="8"] { /* Sky */
-  --bg: #faf0e4;
-  --panel: #ead8c2;
-  --panel-2: #ead8c2;
-  --text: #1f2937;
-  --muted: #6a5746;
-  --accent: #8b5e34;
-  --accent-2:#22b8cf;
-  --grid-border: #d6c2ab;
-  --hour-alt: #dec5a6;
-  --focus: #8b5e34;
-
-  --accent-contrast: #ffffff;
-
-  --panel-1: #ffffff;
-  --hour: #f3e9dc;
-  --focus-ring: #8b5e34;
-  --outline: #d9c5aa;
-  --link: #8b5e34;
-  --selection: #a47148;
-  --gridline: #e2d3c1;}
+html[data-theme="8"] { /* Wood */
+    --bg: #faf0e4;
+    --panel: #ead8c2;
+    --panel-2: #ead8c2;
+    --text: #1f2937;
+    --muted: #6a5746;
+    --accent: #8b5e34;
+    --accent-2: #22b8cf;
+    --grid-border: #d6c2ab;
+    --hour-alt: #dec5a6;
+    --focus: #8b5e34;
+    --accent-contrast: #ffffff;
+    --panel-1: #ffffff;
+    --hour: #f3e9dc;
+    --focus-ring: #8b5e34;
+    --outline: #d9c5aa;
+    --link: #8b5e34;
+    --selection: #a47148;
+    --gridline: #e2d3c1;
+}
 
 /* v1.9.44: controls on same line as Add city */
 .add-city .maxline { display:flex; align-items:center; gap:12px; }
@@ -457,3 +520,80 @@ html[data-theme="8"] { /* Sky */
 
 /* v1.9.81 */
 .your-zone-flag{ color: var(--text); }
+
+
+/* Drag & drop visuals */
+.row.dragging {
+    opacity: .7;
+}
+
+.row.drop-before {
+    box-shadow: 0 -2px 0 0 var(--accent);
+}
+
+.row.drop-after {
+    box-shadow: 0 2px 0 0 var(--accent);
+}
+
+.row-header {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    border-right: 1px solid var(--grid-border);
+    cursor: pointer; /* "hand" on hover */
+    user-select: none;
+}
+
+    .row-header[draggable="true"] {
+        cursor: grab;
+    }
+
+        .row-header[draggable="true"]:active {
+            cursor: grabbing;
+        }
+
+.city-name {
+    font-weight: 700;
+}
+
+.city-sub {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.remove-div {
+    align-content: center;
+}
+
+html[data-theme="6"] .row-zone-remove,
+html[data-theme="7"] .row-zone-remove,
+html[data-theme="8"] .row-zone-remove {
+    background: var(--hour-night) !important;
+}
+
+/* v1.9.83 — brighten time cells for user's zone */
+
+html[data-theme="4"] .row-zone-remove,
+html[data-theme="5"] .row-zone-remove,
+html[data-theme="6"] .row-zone-remove,
+html[data-theme="7"] .row-zone-remove,
+html[data-theme="8"] .row-zone-remove,
+.row.is-your-zone .hour {
+    filter: brightness(1.06);
+    transition: filter .15s ease-in-out;
+}
+
+/* v1.9.88 — stronger highlight for user's zone on dark themes */
+html[data-theme="0"] .row-zone-remove,
+html[data-theme="1"] .row-zone-remove,
+html[data-theme="2"] .row-zone-remove,
+html[data-theme="3"] .row-zone-remove,
+html[data-theme="0"] .row.is-your-zone .hour,
+html[data-theme="1"] .row.is-your-zone .hour,
+html[data-theme="2"] .row.is-your-zone .hour,
+html[data-theme="3"] .row.is-your-zone .hour {
+    box-shadow: inset 0 0 0 9999px rgba(255,255,255,.08);
+}
+
