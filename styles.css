@@ -1,4 +1,21 @@
 
+/* =========================================================
+   v1.9.113 CSS tidy — Semantic palette layer (no visual change)
+   ========================================================= */
+:root {
+  --clr-surface: var(--surface, #1b1b1b);
+  --clr-grid: var(--grid, rgba(128,128,128,.25));
+  --clr-text: var(--text, #e8eefc);
+  --clr-text-muted: var(--muted, #aab6d3);
+  --clr-accent: var(--accent, #5aa1ff);
+  --clr-hour-day: var(--hour, #fae8ff);
+  --clr-hour-night: var(--hour-night, var(--hour-alt));
+}
+
+/* Aliases wired to palette (keeps current visuals) */
+.hour.day { background: var(--clr-hour-day) !important; }
+.hour.night { background: var(--clr-hour-night) !important; }
+
 :root{
   --bg: #0b1020;
   --panel: #121a32;
@@ -248,14 +265,25 @@ input, select, button { font-family: inherit; }
 
 /* Timeline */
 .timeline {
-  display:grid; grid-template-columns: repeat(24, var(--cell-width));
-  gap: 0; position: relative; outline: none;
-  width: calc(24 * var(--cell-width));
+    display: grid;
+    grid-template-columns: repeat(24, var(--cell-width));
+    gap: 0;
+    position: relative;
+    outline: none;
+    width: calc(24 * var(--cell-width));
 }
+
 .hour {
-  padding: 8px 4px; border-left: 1px solid var(--grid-border);
-  display:flex; flex-direction: column; gap:2px; align-items:center; justify-content:center;
-  font-size: 11px; color: var(--muted); min-height: 48px;
+    padding: 8px 4px;
+    border-left: 1px solid var(--grid-border);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--muted);
+    min-height: 48px;
 }
 
 /* alternating column background */
@@ -372,6 +400,9 @@ html[data-theme="6"],
 .grid .row .timeline .hour.night { background: var(--hour-night) !important; }
 
 /* === v1.9.19: dark themes swap (day=light, night=dark), light themes unchanged === */
+html[data-theme="6"] .row-zone-remove,
+html[data-theme="7"] .row-zone-remove,
+html[data-theme="8"] .row-zone-remove,
 html[data-theme="0"] .grid .row .timeline .hour.day,
 html[data-theme="1"] .grid .row .timeline .hour.day,
 html[data-theme="2"] .grid .row .timeline .hour.day,
@@ -474,48 +505,66 @@ html[data-theme="8"] { /* Wood */
 
 /* v1.9.46: hard-align right controls to content edge */
 .add-city .maxline {
-  display: flex !important;
-  align-items: center;
-  gap: 12px;
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    position: relative;
 }
+
 .add-city .maxline .add-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1 1 auto; /* occupy remaining space */
-  min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1 1 auto; /* occupy remaining space */
+    min-width: 0;
 }
+
 .add-city .maxline .right-controls {
-  margin-left: auto;
-  display: flex;
-  gap: 10px;
-  align-items: center;
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    position: absolute;
+    right: 0;
 }
 
 
 /* v1.9.75 — hour cell hover calendar glyph */
-.hour{ position:relative; }
-.hour:focus{ outline:none; }
-.hour::after{
-  content:"";
-  position:absolute;
-  top:1px;
-  right:6px;
-  width:16px;
-  height:16px;
-  opacity:0;
-  transition:opacity .15s ease-in-out;
-  /* calendar icon, uses currentColor so it adapts to theme */
-  background-repeat:no-repeat;
-  background-size:contain;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='currentColor'><path d='M7 2a1 1 0 0 0-1 1v1H5a3 3 0 0 0-3 3v1h20V7a3 3 0 0 0-3-3h-1V3a1 1 0 1 0-2 0v1H8V3a1 1 0 0 0-1-1zM22 10H2v9a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-9zm-12 3h2v2h-2v-2zm-4 0h2v2H6v-2zm8 0h2v2h-2v-2zm-8 4h2v2H6v-2zm4 0h2v2h-2v-2zm8-4h2v2h-2v-2zm-4 4h2v2h-2v-2z'/></svg>");
-  pointer-events:none;
+.hour {
+    position: relative;
 }
+
+.hour:focus {
+    outline: none;
+}
+
+.hour::after {
+    content: "";
+    position: absolute;
+    top: 1px;
+    right: 6px;
+    width: 16px;
+    height: 16px;
+    opacity: 0;
+    transition: opacity .15s ease-in-out;
+    /* calendar icon, uses currentColor so it adapts to theme */
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='currentColor'><path d='M7 2a1 1 0 0 0-1 1v1H5a3 3 0 0 0-3 3v1h20V7a3 3 0 0 0-3-3h-1V3a1 1 0 1 0-2 0v1H8V3a1 1 0 0 0-1-1zM22 10H2v9a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-9zm-12 3h2v2h-2v-2zm-4 0h2v2H6v-2zm8 0h2v2h-2v-2zm-8 4h2v2H6v-2zm4 0h2v2h-2v-2zm8-4h2v2h-2v-2zm-4 4h2v2h-2v-2z'/></svg>");
+    pointer-events: none;
+}
+
 .hour:hover::after,
-.hour:focus-visible::after{ opacity:0.7; }
+
+.hour:focus-visible::after {
+    opacity: 0.7;
+}
+
 /* Slightly dimmer in dark themes to avoid glare */
 .theme-dark .hour:hover::after,
-.theme-dark .hour:focus-visible::after{ opacity:0.7; }
+.theme-dark .hour:focus-visible::after {
+    opacity: 0.7;
+}
 
 
 /* v1.9.81 */
@@ -567,33 +616,156 @@ html[data-theme="8"] { /* Wood */
     align-content: center;
 }
 
-html[data-theme="6"] .row-zone-remove,
-html[data-theme="7"] .row-zone-remove,
-html[data-theme="8"] .row-zone-remove {
-    background: var(--hour-night) !important;
+/* v1.9.115 removed theme-specific row-zone-remove bg */
+
+/* v1.9.115 replaced with unified user-zone brightness */
+
+
+
+/* ===== v1.9.114 unified theme variables ===== */
+:root {
+  --clr-hour-day: rgba(128,128,128,.25);
+  --clr-hour-night: rgba(128,128,128,.5);
+  --clr-surface: #111;
+  --clr-grid: rgba(128,128,128,.25);
+  --clr-text: #e6e6e6;
+  --clr-text-muted: #a0a0a0;
+  --clr-accent: #3b82f6;
 }
 
-/* v1.9.83 — brighten time cells for user's zone */
+html[data-theme="0"] {
+  --clr-hour-day: rgba(128,128,128,.25);
+  --clr-hour-night: rgba(128,128,128,.5);
+  --clr-surface: #111;
+  --clr-grid: rgba(128,128,128,.25);
+  --clr-text: #e8eefc;
+  --clr-text-muted: #aab6d3;
+  --clr-accent: #5aa1ff;
+}
 
-html[data-theme="4"] .row-zone-remove,
-html[data-theme="5"] .row-zone-remove,
-html[data-theme="6"] .row-zone-remove,
-html[data-theme="7"] .row-zone-remove,
-html[data-theme="8"] .row-zone-remove,
+html[data-theme="1"] {
+  --clr-hour-day: rgba(128,128,128,.25);
+  --clr-hour-night: rgba(128,128,128,.5);
+  --clr-surface: #111;
+  --clr-grid: rgba(128,128,128,.25);
+  --clr-text: #ffeef8;
+  --clr-text-muted: #e9cfe3;
+  --clr-accent: #ff86c8;
+}
+
+html[data-theme="2"] {
+  --clr-hour-day: rgba(128,128,128,.25);
+  --clr-hour-night: rgba(128,128,128,.5);
+  --clr-surface: #111;
+  --clr-grid: rgba(128,128,128,.25);
+  --clr-text: #e9ffe9;
+  --clr-text-muted: #bfe6c7;
+  --clr-accent: #7df9a3;
+}
+
+/*html[data-theme="3"] {
+  --clr-hour-day: rgba(128,128,128,.25);
+  --clr-hour-night: rgba(128,128,128,.5);
+  --clr-surface: #111;
+  --clr-grid: rgba(128,128,128,.25);
+  --clr-text: #f0f0f0;
+  --clr-text-muted: #bbb;
+  --clr-accent: #8ad;
+}
+*/
+html[data-theme="3"] {
+    --clr-hour-day: rgba(128,128,128,.25);
+    --clr-hour-night: var(--hour-alt);
+    --clr-surface: #111;
+    --clr-grid: rgba(128,128,128,.25);
+    --clr-text: #e6e6e6;
+    --clr-text-muted: #a0a0a0;
+    --clr-accent: #3b82f6;
+}
+
+html[data-theme="4"] {
+  --clr-hour-day: rgba(128,128,128,.25);
+  --clr-hour-night: rgba(128,128,128,.5);
+  --clr-surface: #111;
+  --clr-grid: rgba(128,128,128,.25);
+  --clr-text: #1d2433;
+  --clr-text-muted: #5b6b85;
+  --clr-accent: #3a7bff;
+}
+
+html[data-theme="5"] {
+  --clr-hour-day: rgba(128,128,128,.25);
+  --clr-hour-night: rgba(128,128,128,.5);
+  --clr-surface: #111;
+  --clr-grid: rgba(128,128,128,.25);
+  --clr-text: #2a2430;
+  --clr-text-muted: #6b6153;
+  --clr-accent: #e09f3e;
+}
+
+html[data-theme="6"] {
+  --clr-hour-day: rgba(128,128,128,.25);
+  --clr-hour-night: rgba(128,128,128,.5);
+  --clr-surface: #111;
+  --clr-grid: rgba(128,128,128,.25);
+  --clr-text: #122033;
+  --clr-text-muted: #4b5d78;
+  --clr-accent: #2b8aef;
+}
+
+html[data-theme="7"] {
+  --clr-hour-day: #fae8ff;
+  --clr-hour-night: rgba(128,128,128,.5);
+  --clr-surface: #111;
+  --clr-grid: rgba(128,128,128,.25);
+  --clr-text: #1f2937;
+  --clr-text-muted: #6b4b66;
+  --clr-accent: #d946ef;
+}
+
+html[data-theme="8"] {
+  --clr-hour-day: #f3e9dc;
+  --clr-hour-night: rgba(128,128,128,.5);
+  --clr-surface: #111;
+  --clr-grid: rgba(128,128,128,.25);
+  --clr-text: #1f2937;
+  --clr-text-muted: #6a5746;
+  --clr-accent: #8b5e34;
+}
+
+/* Component usage (single-source approach) */
+.hour.day { background: var(--clr-hour-day) !important; }
+.hour.night { background: var(--clr-hour-night) !important; }
+
+/* v1.9.115 — Unify user's zone highlighting and remove-column background */
+
+/* Always color the remove column on user's zone with the night tone */
+.row.is-your-zone .row-zone-remove {
+    /*background: var(--clr-hour-night) !important;*/
+/*    background-color: var(--hour-night) !important;
+    --yourzone-brightness: 1.46;
+    --yourzone-overlay: rgba(255,255,255,0.08);
+*/}
+
+/* User's zone time-cell highlight driven by variables */
+:root {
+  --yourzone-brightness: 1.06; /* light themes bump */
+  --yourzone-overlay: transparent; /* no overlay on light themes by default */
+}
+
+/* Dark themes set overlay instead of brightness */
+html[data-theme="0"],
+html[data-theme="1"],
+html[data-theme="2"],
+html[data-theme="3"] {
+    --yourzone-brightness: 1.00;
+    --yourzone-overlay: rgba(255,255,255,0.08);
+}
+
+.row.is-your-zone .row-zone-remove,
 .row.is-your-zone .hour {
-    filter: brightness(1.06);
+    filter: brightness(var(--yourzone-brightness));
+    box-shadow: inset 0 0 0 9999px var(--yourzone-overlay);
     transition: filter .15s ease-in-out;
-}
-
-/* v1.9.88 — stronger highlight for user's zone on dark themes */
-html[data-theme="0"] .row-zone-remove,
-html[data-theme="1"] .row-zone-remove,
-html[data-theme="2"] .row-zone-remove,
-html[data-theme="3"] .row-zone-remove,
-html[data-theme="0"] .row.is-your-zone .hour,
-html[data-theme="1"] .row.is-your-zone .hour,
-html[data-theme="2"] .row.is-your-zone .hour,
-html[data-theme="3"] .row.is-your-zone .hour {
-    box-shadow: inset 0 0 0 9999px rgba(255,255,255,.08);
 }
 
