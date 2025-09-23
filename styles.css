@@ -1,6 +1,6 @@
 
 /* =========================================================
-   v1.9.113 CSS tidy — Semantic palette layer (no visual change)
+   v1.9.127 CSS tidy — Semantic palette layer (no visual change)
    ========================================================= */
 :root {
   --clr-surface: var(--surface, #1b1b1b);
@@ -43,6 +43,7 @@
 }
 
 /* DARK THEMES */
+/*Midnight*/
 html[data-theme="0"] {
     --bg: #0b1020;
     --panel: #121a32;
@@ -52,36 +53,39 @@ html[data-theme="0"] {
     --accent: #5aa1ff;
     --accent-2: #9be37d;
     --grid-border: #1f2742;
-    --hour-alt: #141d3a;
+    --hour-alt: #1B2B51;
     --focus: #1bd1ff;
 }
 
+/*Dawn*/
 html[data-theme="1"] {
     --bg: #1b0f22;
-    --panel: #2a1934;
+    --panel: #22152B;
     --panel-2: #241530;
     --text: #ffeef8;
     --muted: #e9cfe3;
     --accent: #ff86c8;
     --accent-2: #ffd166;
     --grid-border: #3a2147;
-    --hour-alt: #2e1b3a;
+    --hour-alt: #392349;
     --focus: #ff9dd6;
 }
 
+/*Forest*/
 html[data-theme="2"] {
     --bg: #0b1b10;
-    --panel: #0f2516;
+    --panel: #0C1E12;
     --panel-2: #0c1f13;
     --text: #e9ffe9;
     --muted: #bfe6c7;
     --accent: #7df9a3;
     --accent-2: #6ac2ff;
     --grid-border: #163022;
-    --hour-alt: #13281c;
+    --hour-alt: #224731;
     --focus: #8cffbf;
 }
 
+/*Mono*/
 html[data-theme="3"] {
     --bg: #0c0c0c;
     --panel: #141414;
@@ -96,20 +100,24 @@ html[data-theme="3"] {
 }
 
 /* LIGHT THEMES */
-html[data-theme="4"] { /* Pearl */
+
+/* Pearl */
+
+html[data-theme="4"] {
     --bg: #f7f8fb;
-    --panel: #ffffff;
+    --panel: #f3f3f3;
     --panel-2: #f3f5fa;
     --text: #1d2433;
     --muted: #5b6b85;
     --accent: #3a7bff;
     --accent-2: #2f9e44;
     --grid-border: #d9e0ee;
-    --hour-alt: #eef1f8;
-    --focus: #3a7bff;
+    --hour-alt: #DEE0E5;
+    --focus: #3a7bFF;
 }
 
-html[data-theme="5"] { /* Sand */
+/* Sand */
+html[data-theme="5"] { 
     --bg: #fbf7f1;
     --panel: #fffaf2;
     --panel-2: #fff6e6;
@@ -122,7 +130,8 @@ html[data-theme="5"] { /* Sand */
     --focus: #e09f3e;
 }
 
-html[data-theme="6"] { /* Sky */
+/* Sky */
+html[data-theme="6"] { 
     --bg: #eaf2ff;
     --panel: #f9fbff;
     --panel-2: #e2edff;
@@ -370,21 +379,21 @@ input, select, button { font-family: inherit; }
 :root { --hour-day: var(--panel-2); --hour-night: var(--hour-alt); }
 
 /* Dark themes: day lighter, night darker */
-html[data-theme="0"],
+/*html[data-theme="0"],
 html[data-theme="1"],
 html[data-theme="2"],
 html[data-theme="3"] {
   --hour-day: var(--panel-2);
   --hour-night: var(--hour-alt);
 }
+*/
 
 /* Light themes: day = hour-alt (lighter), night = panel-2 (slightly darker) */
-html[data-theme="4"],
+/*html[data-theme="4"],
 html[data-theme="5"],
 html[data-theme="6"],
-/* Apply */
 .hour.day  { background: var(--hour-day) !important; }
-.hour.night{ background: var(--hour-night) !important; }
+.hour.night{ background: var(--hour-night) !important; }*/
 
 /* Keep drag-handle cursor */
 .row-header { cursor: grab; user-select: none; }
@@ -400,6 +409,7 @@ html[data-theme="6"],
 .grid .row .timeline .hour.night { background: var(--hour-night) !important; }
 
 /* === v1.9.19: dark themes swap (day=light, night=dark), light themes unchanged === */
+html[data-theme="4"] .row-zone-remove,
 html[data-theme="6"] .row-zone-remove,
 html[data-theme="7"] .row-zone-remove,
 html[data-theme="8"] .row-zone-remove,
@@ -410,10 +420,6 @@ html[data-theme="3"] .grid .row .timeline .hour.day {
     background: var(--hour-alt) !important;
 }
 
-html[data-theme="0"] .row-zone-remove,
-html[data-theme="1"] .row-zone-remove,
-html[data-theme="2"] .row-zone-remove,
-html[data-theme="3"] .row-zone-remove,
 html[data-theme="0"] .grid .row .timeline .hour.night,
 html[data-theme="1"] .grid .row .timeline .hour.night,
 html[data-theme="2"] .grid .row .timeline .hour.night,
@@ -422,17 +428,19 @@ html[data-theme="3"] .grid .row .timeline .hour.night {
 }
 
 /* === v1.9.21: color-value tweaks only === */
-html[data-theme="0"] .grid .row .timeline .hour.day { background: #5a6175 !important; }
+/*html[data-theme="0"] .grid .row .timeline .hour.day { background: #5a6175 !important; }
 html[data-theme="1"] .grid .row .timeline .hour.day { background: #6d5f75 !important; }
 html[data-theme="2"] .grid .row .timeline .hour.day { background: #5a6860 !important; }
-html[data-theme="4"] .grid .row .timeline .hour.day { background: var(--hour-alt) !important; }
+html[data-theme="4"] .grid .row .timeline .hour.day { background: var(--hour-alt) !important; }*/
 
-html[data-theme="4"] .row-zone-remove,
+/*html[data-theme="4"] .row-zone-remove,
 html[data-theme="4"] .grid .row .timeline .hour.night {
     background: #c2c4c8 !important;
-}
+}*/
 
-html[data-theme="5"] .grid .row .timeline .hour.day { background: var(--hour-alt) !important; }
+html[data-theme="5"] .grid .row .timeline .hour.day {
+    background: var(--hour-alt) !important;
+}
 
 html[data-theme="5"] .row-zone-remove,
 html[data-theme="5"] .grid .row .timeline .hour.night {
@@ -634,45 +642,41 @@ html[data-theme="8"] { /* Wood */
 }
 
 html[data-theme="0"] {
-  --clr-hour-day: rgba(128,128,128,.25);
-  --clr-hour-night: rgba(128,128,128,.5);
-  --clr-surface: #111;
-  --clr-grid: rgba(128,128,128,.25);
-  --clr-text: #e8eefc;
-  --clr-text-muted: #aab6d3;
-  --clr-accent: #5aa1ff;
+    --clr-hour-day: rgba(128,128,128,.25);
+    --clr-hour-night: rgba(128,128,128,.5);
+    --clr-surface: #111;
+    --clr-grid: rgba(128,128,128,.25);
+    --clr-text: #e8eefc;
+    --clr-text-muted: #aab6d3;
+    --clr-accent: #5aa1ff;
+    --yourzone-brightness: 1.15;
+    --yourzone-overlay: rgba(255,255,255,0.1);
 }
 
 html[data-theme="1"] {
-  --clr-hour-day: rgba(128,128,128,.25);
-  --clr-hour-night: rgba(128,128,128,.5);
-  --clr-surface: #111;
-  --clr-grid: rgba(128,128,128,.25);
-  --clr-text: #ffeef8;
-  --clr-text-muted: #e9cfe3;
-  --clr-accent: #ff86c8;
+    --clr-hour-day: rgba(128,128,128,.25);
+    --clr-hour-night: rgba(128,128,128,.5);
+    --clr-surface: #111;
+    --clr-grid: rgba(128,128,128,.25);
+    --clr-text: #ffeef8;
+    --clr-text-muted: #e9cfe3;
+    --clr-accent: #ff86c8;
+    --yourzone-brightness: 1.15;
+    --yourzone-overlay: rgba(255,255,255,0.1);
 }
 
 html[data-theme="2"] {
-  --clr-hour-day: rgba(128,128,128,.25);
-  --clr-hour-night: rgba(128,128,128,.5);
-  --clr-surface: #111;
-  --clr-grid: rgba(128,128,128,.25);
-  --clr-text: #e9ffe9;
-  --clr-text-muted: #bfe6c7;
-  --clr-accent: #7df9a3;
+    --clr-hour-day: rgba(128,128,128,.25);
+    --clr-hour-night: rgba(128,128,128,.5);
+    --clr-surface: #111;
+    --clr-grid: rgba(128,128,128,.25);
+    --clr-text: #e9ffe9;
+    --clr-text-muted: #bfe6c7;
+    --clr-accent: #7df9a3;
+    --yourzone-brightness: 1.15;
+    --yourzone-overlay: rgba(255,255,255,0.1);
 }
 
-/*html[data-theme="3"] {
-  --clr-hour-day: rgba(128,128,128,.25);
-  --clr-hour-night: rgba(128,128,128,.5);
-  --clr-surface: #111;
-  --clr-grid: rgba(128,128,128,.25);
-  --clr-text: #f0f0f0;
-  --clr-text-muted: #bbb;
-  --clr-accent: #8ad;
-}
-*/
 html[data-theme="3"] {
     --clr-hour-day: rgba(128,128,128,.25);
     --clr-hour-night: var(--hour-alt);
@@ -681,56 +685,73 @@ html[data-theme="3"] {
     --clr-text: #e6e6e6;
     --clr-text-muted: #a0a0a0;
     --clr-accent: #3b82f6;
+    --yourzone-brightness: 1.15;
+    --yourzone-overlay: rgba(255,255,255,0.1);
 }
 
+/*Pearl*/
 html[data-theme="4"] {
-  --clr-hour-day: rgba(128,128,128,.25);
-  --clr-hour-night: rgba(128,128,128,.5);
-  --clr-surface: #111;
-  --clr-grid: rgba(128,128,128,.25);
-  --clr-text: #1d2433;
-  --clr-text-muted: #5b6b85;
-  --clr-accent: #3a7bff;
+    --clr-hour-day: rgba(128,128,128,.25);
+    --clr-hour-night: rgba(128,128,128,.5);
+    --clr-surface: #111;
+    --clr-grid: rgba(128,128,128,.25);
+    --clr-text: #1d2433;
+    --clr-text-muted: #5b6b85;
+    --clr-accent: #3a7bff;
+    --yourzone-brightness: 1.05;
+    --yourzone-overlay: rgba(128,128,128,0.05);
 }
 
+/*Sand*/
 html[data-theme="5"] {
-  --clr-hour-day: rgba(128,128,128,.25);
-  --clr-hour-night: rgba(128,128,128,.5);
-  --clr-surface: #111;
-  --clr-grid: rgba(128,128,128,.25);
-  --clr-text: #2a2430;
-  --clr-text-muted: #6b6153;
-  --clr-accent: #e09f3e;
+    --clr-hour-day: rgba(128,128,128,.25);
+    --clr-hour-night: rgba(128,128,128,.5);
+    --clr-surface: #111;
+    --clr-grid: rgba(128,128,128,.25);
+    --clr-text: #2a2430;
+    --clr-text-muted: #6b6153;
+    --clr-accent: #e09f3e;
+    --yourzone-brightness: 1.07;
+    --yourzone-overlay: transparent;
 }
 
+/*Sky*/
 html[data-theme="6"] {
-  --clr-hour-day: rgba(128,128,128,.25);
-  --clr-hour-night: rgba(128,128,128,.5);
-  --clr-surface: #111;
-  --clr-grid: rgba(128,128,128,.25);
-  --clr-text: #122033;
-  --clr-text-muted: #4b5d78;
-  --clr-accent: #2b8aef;
+    --clr-hour-day: rgba(128,128,128,.25);
+    --clr-hour-night: rgba(128,128,128,.5);
+    --clr-surface: #111;
+    --clr-grid: rgba(128,128,128,.25);
+    --clr-text: #122033;
+    --clr-text-muted: #4b5d78;
+    --clr-accent: #2b8aef;
+    --yourzone-brightness: 1.05;
+    --yourzone-overlay: rgba(128,128,255,0.05);
 }
 
+/*Fuchsia*/
 html[data-theme="7"] {
-  --clr-hour-day: #fae8ff;
-  --clr-hour-night: rgba(128,128,128,.5);
-  --clr-surface: #111;
-  --clr-grid: rgba(128,128,128,.25);
-  --clr-text: #1f2937;
-  --clr-text-muted: #6b4b66;
-  --clr-accent: #d946ef;
+    --clr-hour-day: #fae8ff;
+    --clr-hour-night: rgba(128,128,128,.5);
+    --clr-surface: #111;
+    --clr-grid: rgba(128,128,128,.25);
+    --clr-text: #1f2937;
+    --clr-text-muted: #6b4b66;
+    --clr-accent: #d946ef;
+    --yourzone-brightness: 1.07;
+    --yourzone-overlay: transparent;
 }
 
+/*Wood*/
 html[data-theme="8"] {
-  --clr-hour-day: #f3e9dc;
-  --clr-hour-night: rgba(128,128,128,.5);
-  --clr-surface: #111;
-  --clr-grid: rgba(128,128,128,.25);
-  --clr-text: #1f2937;
-  --clr-text-muted: #6a5746;
-  --clr-accent: #8b5e34;
+    --clr-hour-day: #f3e9dc;
+    --clr-hour-night: rgba(128,128,128,.5);
+    --clr-surface: #111;
+    --clr-grid: rgba(128,128,128,.25);
+    --clr-text: #1f2937;
+    --clr-text-muted: #6a5746;
+    --clr-accent: #8b5e34;
+    --yourzone-brightness: 1.06;
+    --yourzone-overlay: transparent;
 }
 
 /* Component usage (single-source approach) */
@@ -740,27 +761,28 @@ html[data-theme="8"] {
 /* v1.9.115 — Unify user's zone highlighting and remove-column background */
 
 /* Always color the remove column on user's zone with the night tone */
-.row.is-your-zone .row-zone-remove {
+/*.row.is-your-zone .row-zone-remove {*/
     /*background: var(--clr-hour-night) !important;*/
 /*    background-color: var(--hour-night) !important;
     --yourzone-brightness: 1.46;
     --yourzone-overlay: rgba(255,255,255,0.08);
-*/}
+*//*}*/
 
 /* User's zone time-cell highlight driven by variables */
-:root {
-  --yourzone-brightness: 1.06; /* light themes bump */
-  --yourzone-overlay: transparent; /* no overlay on light themes by default */
-}
+/*:root {
+  --yourzone-brightness: 1.06;*/ /* light themes bump */
+  /*--yourzone-overlay: transparent;*/ /* no overlay on light themes by default */
+/*}*/
 
 /* Dark themes set overlay instead of brightness */
-html[data-theme="0"],
+/*html[data-theme="0"],
 html[data-theme="1"],
 html[data-theme="2"],
 html[data-theme="3"] {
-    --yourzone-brightness: 1.00;
-    --yourzone-overlay: rgba(255,255,255,0.08);
+    --yourzone-brightness: 1.15;
+    --yourzone-overlay: rgba(255,255,255,0.1);
 }
+*/
 
 .row.is-your-zone .row-zone-remove,
 .row.is-your-zone .hour {

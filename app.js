@@ -134,7 +134,7 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
         dateISO: toISODate(new Date()),
         rows: [],
         timeFormat: "24",
-        theme: 0,
+        theme: 6,
         focusHour: new Date().getHours()
     };
 
