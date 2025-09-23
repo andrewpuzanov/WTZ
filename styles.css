@@ -16,7 +16,7 @@
 .hour.day { background: var(--clr-hour-day) !important; }
 .hour.night { background: var(--clr-hour-night) !important; }
 
-:root{
+:root {
   --bg: #0b1020;
   --panel: #121a32;
   --panel-2: #0f162b;
@@ -29,13 +29,10 @@
   --hour-alt: #141d3a;
   --focus: #1bd1ff;
   --radius: 14px;
-
   --cell-width: 50px;
   --time-font-size: 11px;
-
   --city-col: 260px;
   --remove-col: 44px;
-
   --grid-pad-x: 8px;
   --grid-pad-y: 8px;
   --grid-pad: calc(var(--grid-pad-x) * 2);
@@ -45,103 +42,146 @@
 /* DARK THEMES */
 /*Midnight*/
 html[data-theme="0"] {
-    --bg: #0b1020;
-    --panel: #121a32;
-    --panel-2: #0f162b;
-    --text: #e8eefc;
-    --muted: #aab6d3;
-    --accent: #5aa1ff;
-    --accent-2: #9be37d;
-    --grid-border: #1f2742;
-    --hour-alt: #1B2B51;
-    --focus: #1bd1ff;
+  --bg: #0b1020;
+  --panel: #121a32;
+  --panel-2: var(--panel);
+  --text: #e8eefc;
+  --muted: #aab6d3;
+  --accent: #5aa1ff;
+  --accent-2: #9be37d;
+  --grid-border: #1f2742;
+  --hour-alt: #1B2B51;
+  --focus: #1bd1ff;
 }
 
 /*Dawn*/
 html[data-theme="1"] {
-    --bg: #1b0f22;
-    --panel: #22152B;
-    --panel-2: #241530;
-    --text: #ffeef8;
-    --muted: #e9cfe3;
-    --accent: #ff86c8;
-    --accent-2: #ffd166;
-    --grid-border: #3a2147;
-    --hour-alt: #392349;
-    --focus: #ff9dd6;
+  --bg: #1b0f22;
+  --panel: #22152B;
+  --panel-2: var(--panel);
+  --text: #ffeef8;
+  --muted: #e9cfe3;
+  --accent: #ff86c8;
+  --accent-2: #ffd166;
+  --grid-border: #3a2147;
+  --hour-alt: #392349;
+  --focus: #ff9dd6;
 }
 
 /*Forest*/
 html[data-theme="2"] {
-    --bg: #0b1b10;
-    --panel: #0C1E12;
-    --panel-2: #0c1f13;
-    --text: #e9ffe9;
-    --muted: #bfe6c7;
-    --accent: #7df9a3;
-    --accent-2: #6ac2ff;
-    --grid-border: #163022;
-    --hour-alt: #224731;
-    --focus: #8cffbf;
+  --bg: #0b1b10;
+  --panel: #0C1E12;
+  --panel-2: var(--panel);
+  --text: #e9ffe9;
+  --muted: #bfe6c7;
+  --accent: #7df9a3;
+  --accent-2: #6ac2ff;
+  --grid-border: #163022;
+  --hour-alt: #224731;
+  --focus: #8cffbf;
 }
 
 /*Mono*/
 html[data-theme="3"] {
-    --bg: #0c0c0c;
-    --panel: #141414;
-    --panel-2: #111;
-    --text: #f0f0f0;
-    --muted: #bbb;
-    --accent: #8ad;
-    --accent-2: #ddd;
-    --grid-border: #222;
-    --hour-alt: #171717;
-    --focus: #aaa;
+  --bg: #0c0c0c;
+  --panel: #141414;
+  --panel-2: var(--panel);
+  --text: #f0f0f0;
+  --muted: #bbb;
+  --accent: #8ad;
+  --accent-2: #ddd;
+  --grid-border: #222;
+  --hour-alt: #585858;
+  --focus: #aaa;
 }
 
 /* LIGHT THEMES */
 
 /* Pearl */
-
 html[data-theme="4"] {
-    --bg: #f7f8fb;
-    --panel: #f3f3f3;
-    --panel-2: #f3f5fa;
-    --text: #1d2433;
-    --muted: #5b6b85;
-    --accent: #3a7bff;
-    --accent-2: #2f9e44;
-    --grid-border: #d9e0ee;
-    --hour-alt: #DEE0E5;
-    --focus: #3a7bFF;
+  --bg: #f7f8fb;
+  --panel: #fafafa;
+  --panel-2: var(--panel);
+  --text: #1d2433;
+  --muted: #5b6b85;
+  --accent: #3a7bff;
+  --accent-2: #2f9e44;
+  --grid-border: #d9e0ee;
+  --hour-alt: #DEE0E5;
+  --focus: #3a7bFF;
 }
 
 /* Sand */
-html[data-theme="5"] { 
-    --bg: #fbf7f1;
-    --panel: #fffaf2;
-    --panel-2: #fff6e6;
-    --text: #2a2430;
-    --muted: #6b6153;
-    --accent: #e09f3e;
-    --accent-2: #3a86ff;
-    --grid-border: #eadfcd;
-    --hour-alt: #f8eedf;
-    --focus: #e09f3e;
+html[data-theme="5"] {
+  --bg: #fbf7f1;
+  --panel: #fffaf2;
+  --panel-2: var(--panel);
+  --text: #2a2430;
+  --muted: #6b6153;
+  --accent: #e09f3e;
+  --accent-2: #3a86ff;
+  --grid-border: #eadfcd;
+  --hour-alt: #f8eedf;
+  --focus: #e09f3e;
 }
 
 /* Sky */
-html[data-theme="6"] { 
-    --bg: #eaf2ff;
-    --panel: #f9fbff;
-    --panel-2: #e2edff;
-    --text: #122033;
-    --muted: #4b5d78;
-    --accent: #2b8aef;
-    --accent-2: #22b8cf;
-    --grid-border: #c7dcff;
-    --hour-alt: #dfeaff;
-    --focus: #2b8aef;
+html[data-theme="6"] {
+  --bg: #eaf2ff;
+  --panel: #f9fbff;
+  --panel-2: var(--panel);
+  --text: #122033;
+  --muted: #4b5d78;
+  --accent: #2b8aef;
+  --accent-2: #22b8cf;
+  --grid-border: #c7dcff;
+  --hour-alt: #dfeaff;
+  --focus: #2b8aef;
+}
+
+/* Fuchsia */
+html[data-theme="7"] {
+  --bg: #fbe7ff;
+  --panel: #F4D3FF;
+  --panel-2: var(--panel);
+  --text: #1f2937;
+  --muted: #6b4b66;
+  --accent: #d946ef;
+  --accent-2: #22b8cf;
+  --grid-border: #e4c8fb;
+  --hour-alt: var(--panel);
+  --focus: #d946ef;
+  --accent-contrast: #ffffff;
+  --panel-1: #ffffff;
+  --hour: #fae8ff;
+  --focus-ring: #d946ef;
+  --outline: #e5b6fa;
+  --link: #d946ef;
+  --selection: #e879f9;
+  --gridline: #edd6fb;
+}
+
+/* Wood */
+html[data-theme="8"] {
+  --bg: #faf0e4;
+  --panel: #ead8c2;
+  --panel-2: #ead8c2;
+  --text: #1f2937;
+  --muted: #6a5746;
+  --accent: #8b5e34;
+  --accent-2: #22b8cf;
+  --grid-border: #d6c2ab;
+  --hour-alt: #dec5a6;
+  --focus: #8b5e34;
+  --accent-contrast: #ffffff;
+  --panel-1: #ffffff;
+  --hour: #f3e9dc;
+  --focus-ring: #8b5e34;
+  --outline: #d9c5aa;
+  --link: #8b5e34;
+  --selection: #a47148;
+  --gridline: #e2d3c1;
 }
 
 * {
@@ -378,23 +418,6 @@ input, select, button { font-family: inherit; }
 /* Day/Night coloring using existing theme tokens */
 :root { --hour-day: var(--panel-2); --hour-night: var(--hour-alt); }
 
-/* Dark themes: day lighter, night darker */
-/*html[data-theme="0"],
-html[data-theme="1"],
-html[data-theme="2"],
-html[data-theme="3"] {
-  --hour-day: var(--panel-2);
-  --hour-night: var(--hour-alt);
-}
-*/
-
-/* Light themes: day = hour-alt (lighter), night = panel-2 (slightly darker) */
-/*html[data-theme="4"],
-html[data-theme="5"],
-html[data-theme="6"],
-.hour.day  { background: var(--hour-day) !important; }
-.hour.night{ background: var(--hour-night) !important; }*/
-
 /* Keep drag-handle cursor */
 .row-header { cursor: grab; user-select: none; }
 .row-header:active { cursor: grabbing; }
@@ -407,93 +430,6 @@ html[data-theme="6"],
 }
 .grid .row .timeline .hour.day   { background: var(--hour-day) !important; }
 .grid .row .timeline .hour.night { background: var(--hour-night) !important; }
-
-/* === v1.9.19: dark themes swap (day=light, night=dark), light themes unchanged === */
-html[data-theme="4"] .row-zone-remove,
-html[data-theme="6"] .row-zone-remove,
-html[data-theme="7"] .row-zone-remove,
-html[data-theme="8"] .row-zone-remove,
-html[data-theme="0"] .grid .row .timeline .hour.day,
-html[data-theme="1"] .grid .row .timeline .hour.day,
-html[data-theme="2"] .grid .row .timeline .hour.day,
-html[data-theme="3"] .grid .row .timeline .hour.day {
-    background: var(--hour-alt) !important;
-}
-
-html[data-theme="0"] .grid .row .timeline .hour.night,
-html[data-theme="1"] .grid .row .timeline .hour.night,
-html[data-theme="2"] .grid .row .timeline .hour.night,
-html[data-theme="3"] .grid .row .timeline .hour.night {
-    background: var(--hour) !important;
-}
-
-/* === v1.9.21: color-value tweaks only === */
-/*html[data-theme="0"] .grid .row .timeline .hour.day { background: #5a6175 !important; }
-html[data-theme="1"] .grid .row .timeline .hour.day { background: #6d5f75 !important; }
-html[data-theme="2"] .grid .row .timeline .hour.day { background: #5a6860 !important; }
-html[data-theme="4"] .grid .row .timeline .hour.day { background: var(--hour-alt) !important; }*/
-
-/*html[data-theme="4"] .row-zone-remove,
-html[data-theme="4"] .grid .row .timeline .hour.night {
-    background: #c2c4c8 !important;
-}*/
-
-html[data-theme="5"] .grid .row .timeline .hour.day {
-    background: var(--hour-alt) !important;
-}
-
-html[data-theme="5"] .row-zone-remove,
-html[data-theme="5"] .grid .row .timeline .hour.night {
-    background: #ccc5b8 !important;
-}
-
-/* === v1.9.28: Mono only — day color = lighten(panel-2, 30%) = #585858 === */
-html[data-theme="3"] .grid .row .timeline .hour.day { background: #585858 !important; }
-
-/* v1.9.37: Paper only — night (dark) cells 10% darker */
-
-/* v1.9.38: add Fuchsia (7) and Wood (8); remove Paper */
-html[data-theme="7"] { /* Fuchsia */
-    --bg: #fbe7ff;
-    --panel: #f6d7ff;
-    --panel-2: #f6d7ff;
-    --text: #1f2937;
-    --muted: #6b4b66;
-    --accent: #d946ef;
-    --accent-2: #22b8cf;
-    --grid-border: #e4c8fb;
-    --hour-alt: #f1d0ff;
-    --focus: #d946ef;
-    --accent-contrast: #ffffff;
-    --panel-1: #ffffff;
-    --hour: #fae8ff;
-    --focus-ring: #d946ef;
-    --outline: #e5b6fa;
-    --link: #d946ef;
-    --selection: #e879f9;
-    --gridline: #edd6fb;
-}
-
-html[data-theme="8"] { /* Wood */
-    --bg: #faf0e4;
-    --panel: #ead8c2;
-    --panel-2: #ead8c2;
-    --text: #1f2937;
-    --muted: #6a5746;
-    --accent: #8b5e34;
-    --accent-2: #22b8cf;
-    --grid-border: #d6c2ab;
-    --hour-alt: #dec5a6;
-    --focus: #8b5e34;
-    --accent-contrast: #ffffff;
-    --panel-1: #ffffff;
-    --hour: #f3e9dc;
-    --focus-ring: #8b5e34;
-    --outline: #d9c5aa;
-    --link: #8b5e34;
-    --selection: #a47148;
-    --gridline: #e2d3c1;
-}
 
 /* v1.9.44: controls on same line as Add city */
 .add-city .maxline { display:flex; align-items:center; gap:12px; }
@@ -546,7 +482,7 @@ html[data-theme="8"] { /* Wood */
     outline: none;
 }
 
-.hour::after {
+  .hour::after {background-color: var(--text); -webkit-mask-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+CjxwYXRoIGZpbGw9IiMwMDAiIGQ9Ik03IDJhMSAxIDAgMCAwLTEgMXYxSDVhMyAzIDAgMCAwLTMgM3YxaDIwVjdhMyAzIDAgMCAwLTMtM2gtMVYzYTEgMSAwIDEgMC0yIDB2MUg4VjNhMSAxIDAgMCAwLTEtMXpNMjIgMTBIMnY5YTMgMyAwIDAgMCAzIDNoMTRhMyAzIDAgMCAwIDMtM3YtOXptLTEyIDNoMnYyaC0ydi0yem0tNCAwaDJ2Mkg2di0yem04IDBoMnYyaC0ydi0yem0tOCA0aDJ2Mkg2di0yem00IDBoMnYyaC0ydi0yem04LTRoMnYyaC0ydi0yem0tNCA0aDJ2MmgtMnYtMnoiLz4KPC9zdmc+); mask-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+CjxwYXRoIGZpbGw9IiMwMDAiIGQ9Ik03IDJhMSAxIDAgMCAwLTEgMXYxSDVhMyAzIDAgMCAwLTMgM3YxaDIwVjdhMyAzIDAgMCAwLTMtM2gtMVYzYTEgMSAwIDEgMC0yIDB2MUg4VjNhMSAxIDAgMCAwLTEtMXpNMjIgMTBIMnY5YTMgMyAwIDAgMCAzIDNoMTRhMyAzIDAgMCAwIDMtM3YtOXptLTEyIDNoMnYyaC0ydi0yem0tNCAwaDJ2Mkg2di0yem04IDBoMnYyaC0ydi0yem0tOCA0aDJ2Mkg2di0yem00IDBoMnYyaC0ydi0yem04LTRoMnYyaC0ydi0yem0tNCA0aDJ2MmgtMnYtMnoiLz4KPC9zdmc+); -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; -webkit-mask-size: 16px 16px; mask-size: 16px 16px;
     content: "";
     position: absolute;
     top: 1px;
@@ -556,17 +492,16 @@ html[data-theme="8"] { /* Wood */
     opacity: 0;
     transition: opacity .15s ease-in-out;
     /* calendar icon, uses currentColor so it adapts to theme */
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='currentColor'><path d='M7 2a1 1 0 0 0-1 1v1H5a3 3 0 0 0-3 3v1h20V7a3 3 0 0 0-3-3h-1V3a1 1 0 1 0-2 0v1H8V3a1 1 0 0 0-1-1zM22 10H2v9a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-9zm-12 3h2v2h-2v-2zm-4 0h2v2H6v-2zm8 0h2v2h-2v-2zm-8 4h2v2H6v-2zm4 0h2v2h-2v-2zm8-4h2v2h-2v-2zm-4 4h2v2h-2v-2z'/></svg>");
+    
+    
+    utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='currentColor'><path d='M7 2a1 1 0 0 0-1 1v1H5a3 3 0 0 0-3 3v1h20V7a3 3 0 0 0-3-3h-1V3a1 1 0 1 0-2 0v1H8V3a1 1 0 0 0-1-1zM22 10H2v9a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-9zm-12 3h2v2h-2v-2zm-4 0h2v2H6v-2zm8 0h2v2h-2v-2zm-8 4h2v2H6v-2zm4 0h2v2h-2v-2zm8-4h2v2h-2v-2zm-4 4h2v2h-2v-2z'/></svg>");
     pointer-events: none;
-}
+  }
 
-.hour:hover::after,
-
-.hour:focus-visible::after {
+  .hour:hover::after,
+  .hour:focus-visible::after {
     opacity: 0.7;
-}
+  }
 
 /* Slightly dimmer in dark themes to avoid glare */
 .theme-dark .hour:hover::after,
@@ -576,7 +511,9 @@ html[data-theme="8"] { /* Wood */
 
 
 /* v1.9.81 */
-.your-zone-flag{ color: var(--text); }
+.your-zone-flag {
+    color: var(--text);
+}
 
 
 /* Drag & drop visuals */
@@ -603,13 +540,13 @@ html[data-theme="8"] { /* Wood */
     user-select: none;
 }
 
-    .row-header[draggable="true"] {
-        cursor: grab;
-    }
+.row-header[draggable="true"] {
+    cursor: grab;
+}
 
-        .row-header[draggable="true"]:active {
-            cursor: grabbing;
-        }
+.row-header[draggable="true"]:active {
+    cursor: grabbing;
+}
 
 .city-name {
     font-weight: 700;
@@ -624,11 +561,6 @@ html[data-theme="8"] { /* Wood */
     align-content: center;
 }
 
-/* v1.9.115 removed theme-specific row-zone-remove bg */
-
-/* v1.9.115 replaced with unified user-zone brightness */
-
-
 
 /* ===== v1.9.114 unified theme variables ===== */
 :root {
@@ -641,6 +573,7 @@ html[data-theme="8"] { /* Wood */
   --clr-accent: #3b82f6;
 }
 
+/*Midnight*/
 html[data-theme="0"] {
     --clr-hour-day: rgba(128,128,128,.25);
     --clr-hour-night: rgba(128,128,128,.5);
@@ -653,6 +586,7 @@ html[data-theme="0"] {
     --yourzone-overlay: rgba(255,255,255,0.1);
 }
 
+/*Dawn*/
 html[data-theme="1"] {
     --clr-hour-day: rgba(128,128,128,.25);
     --clr-hour-night: rgba(128,128,128,.5);
@@ -665,6 +599,7 @@ html[data-theme="1"] {
     --yourzone-overlay: rgba(255,255,255,0.1);
 }
 
+/*Forest*/
 html[data-theme="2"] {
     --clr-hour-day: rgba(128,128,128,.25);
     --clr-hour-night: rgba(128,128,128,.5);
@@ -677,6 +612,7 @@ html[data-theme="2"] {
     --yourzone-overlay: rgba(255,255,255,0.1);
 }
 
+/*Mono*/
 html[data-theme="3"] {
     --clr-hour-day: rgba(128,128,128,.25);
     --clr-hour-night: var(--hour-alt);
@@ -698,21 +634,22 @@ html[data-theme="4"] {
     --clr-text: #1d2433;
     --clr-text-muted: #5b6b85;
     --clr-accent: #3a7bff;
-    --yourzone-brightness: 1.05;
+    --yourzone-brightness: 1.07;
     --yourzone-overlay: rgba(128,128,128,0.05);
 }
 
 /*Sand*/
 html[data-theme="5"] {
-    --clr-hour-day: rgba(128,128,128,.25);
-    --clr-hour-night: rgba(128,128,128,.5);
-    --clr-surface: #111;
-    --clr-grid: rgba(128,128,128,.25);
-    --clr-text: #2a2430;
-    --clr-text-muted: #6b6153;
-    --clr-accent: #e09f3e;
-    --yourzone-brightness: 1.07;
-    --yourzone-overlay: transparent;
+  --clr-hour-day: rgba(128,128,128,.25);
+  --clr-hour-night: rgba(128,128,128,.5);
+  --clr-surface: #111;
+  --clr-grid: rgba(128,128,128,.25);
+  --clr-text: #2a2430;
+  --clr-text-muted: #6b6153;
+  --clr-accent: #e09f3e;
+  --yourzone-brightness: 1.07;
+  --yourzone-overlay: rgba(128,128,128,0.08);
+  --hour-night: #CEC8BB;
 }
 
 /*Sky*/
@@ -730,15 +667,15 @@ html[data-theme="6"] {
 
 /*Fuchsia*/
 html[data-theme="7"] {
-    --clr-hour-day: #fae8ff;
-    --clr-hour-night: rgba(128,128,128,.5);
-    --clr-surface: #111;
-    --clr-grid: rgba(128,128,128,.25);
-    --clr-text: #1f2937;
-    --clr-text-muted: #6b4b66;
-    --clr-accent: #d946ef;
-    --yourzone-brightness: 1.07;
-    --yourzone-overlay: transparent;
+  --clr-hour-day: #fae8ff;
+  --clr-hour-night: rgba(128,128,128,.5);
+  --clr-surface: #111;
+  --clr-grid: rgba(128,128,128,.25);
+  --clr-text: #1f2937;
+  --clr-text-muted: #6b4b66;
+  --clr-accent: #d946ef;
+  --yourzone-brightness: 1.08;
+  --yourzone-overlay: rgba(128,128,128,0.05);
 }
 
 /*Wood*/
@@ -758,32 +695,6 @@ html[data-theme="8"] {
 .hour.day { background: var(--clr-hour-day) !important; }
 .hour.night { background: var(--clr-hour-night) !important; }
 
-/* v1.9.115 — Unify user's zone highlighting and remove-column background */
-
-/* Always color the remove column on user's zone with the night tone */
-/*.row.is-your-zone .row-zone-remove {*/
-    /*background: var(--clr-hour-night) !important;*/
-/*    background-color: var(--hour-night) !important;
-    --yourzone-brightness: 1.46;
-    --yourzone-overlay: rgba(255,255,255,0.08);
-*//*}*/
-
-/* User's zone time-cell highlight driven by variables */
-/*:root {
-  --yourzone-brightness: 1.06;*/ /* light themes bump */
-  /*--yourzone-overlay: transparent;*/ /* no overlay on light themes by default */
-/*}*/
-
-/* Dark themes set overlay instead of brightness */
-/*html[data-theme="0"],
-html[data-theme="1"],
-html[data-theme="2"],
-html[data-theme="3"] {
-    --yourzone-brightness: 1.15;
-    --yourzone-overlay: rgba(255,255,255,0.1);
-}
-*/
-
 .row.is-your-zone .row-zone-remove,
 .row.is-your-zone .hour {
     filter: brightness(var(--yourzone-brightness));
@@ -791,3 +702,27 @@ html[data-theme="3"] {
     transition: filter .15s ease-in-out;
 }
 
+/* === Unified day/night mapping & remove column background (v1.9.127-fix) === */
+
+/* Default mapping: light-style themes use --hour as day, --hour-alt as night */
+:root {
+  --hour-day: var(--hour);
+  --hour-night: var(--hour-alt);
+}
+
+/* Dark themes swap day/night so day is the lighter tone */
+html[data-theme="0"],
+html[data-theme="1"],
+html[data-theme="2"],
+html[data-theme="3"] {
+  --hour-day: var(--hour-alt, var(--hour)); /* lighter in dark schemes */
+  --hour-night: var(--panel-2, var(--hour-alt)); /* darker in dark schemes */
+}
+
+/* Apply the colors in one place */
+.grid .row .timeline .hour.day   { background: var(--hour-day) !important; }
+.grid .row .timeline .hour.night { background: var(--hour-night) !important; }
+
+/* When JS marks elements with .row-zone-remove (for your zone),
+   give them the same background as night cells so the first two columns match. */
+.row-zone-remove { background: var(--hour-night) !important; }
