@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles.css?v=1.9.131" />
+    <title>World Time Zones v1.9.134</title>
+    <link rel="stylesheet" href="styles.css?v=1.9.134" />
 </head>
 
 <!-- Google tag (gtag.js) -->
@@ -20,7 +21,7 @@
     <header class="app-header">
         <div class="maxline header-inner">
             <div class="title-wrap">
-                <h1>World Time Zones <small id="versionLabel">v1.9.132</small></h1>
+                <h1>World Time Zones <small id="versionLabel">v1.9.134</small></h1>
             </div>
 
         </div>
@@ -37,35 +38,38 @@
                 </div>
                 <div class="controls right-controls">
 
-                    <button id="followSunBtn" class="btn" type="button" onclick="followTheSunSoft()" style="margin-right:12px">Follow the Sun</button><label>
-                        Date:
-                        <input type="date" id="datePicker" />
-                    </label>
+                  <button id="followSunBtn" class="btn" type="button" onclick="followTheSunSoft()" style="margin-right:12px">Follow the Sun</button>
+                  
+                  <label style="margin-right:12px">
+                    Date:
+                    <input type="date" id="datePicker" />
+                  </label>
 
-                    <label>
-                        Time format:
-                        <select id="timeFormatSelect">
-                            <option value="24">24-hour</option>
-                            <option value="12">AM/PM</option>
-                        </select>
-                    </label>
+                  <button id="resetDateBtn" title="Jump to today" style="margin-right:12px">Today</button>
 
-                    <label>
-                        Theme:
-                        <select id="themeSelect">
-                            <option value="0">Midnight (dark)</option>
-                            <option value="1">Dawn (dark)</option>
-                            <option value="2">Forest (dark)</option>
-                            <option value="3">Mono (dark)</option>
-                            <option value="4">Pearl (light)</option>
-                            <option value="5">Sand (light)</option>
-                            <option value="6">Sky (light)</option>
-                            <option value="7">Fuchsia (light)</option>
-                            <option value="8">Wood (light)</option>
-                        </select>
-                    </label>
+                  <label>
+                    Time format:
+                    <select id="timeFormatSelect">
+                      <option value="24">24-hour</option>
+                      <option value="12">AM/PM</option>
+                    </select>
+                  </label>
 
-                    <button id="resetDateBtn" title="Jump to today">Today</button>
+                  <label>
+                    Theme:
+                    <select id="themeSelect">
+                      <option value="0">Midnight (dark)</option>
+                      <option value="1">Dawn (dark)</option>
+                      <option value="2">Forest (dark)</option>
+                      <option value="3">Mono (dark)</option>
+                      <option value="4">Pearl (light)</option>
+                      <option value="5">Sand (light)</option>
+                      <option value="6">Sky (light)</option>
+                      <option value="7">Fuchsia (light)</option>
+                      <option value="8">Wood (light)</option>
+                    </select>
+                  </label>
+
 
                 </div>
                 <button id="customTzBtn" type="button" class="btn-neutral">Add with custom time zone</button>
@@ -91,8 +95,8 @@
     </template>
 
     <script>
-        window.__APP_VERSION__ = "v1.9.116";
+        window.__APP_VERSION__ = "v1.9.134";
     </script>
-    <script src="app.js?v=1.9.131"></script>
+    <script src="app.js?v=1.9.134"></script>
 </body>
 </html>

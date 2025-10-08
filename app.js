@@ -1,5 +1,5 @@
-const APP_VERSION = "v1.9.116";
-/* World Time Zones v1.9.85 */
+const APP_VERSION = "v1.9.134";
+/* World Time Zones v1.9.134 */
 const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
 (() => {
     const $ = (sel, root = document) => root.querySelector(sel);
@@ -138,8 +138,8 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
         focusHour: new Date().getHours()
     };
 
-    function persist() { storage.set({ version: window.__APP_VERSION__, ...state }); }
-    function loadPersisted() { const obj = storage.get(); if (obj) state = { ...state, ...obj }; }
+    function persist() { const { dateISO, ...rest } = state; storage.set({ version: window.__APP_VERSION__, ...rest }); }
+    function loadPersisted() { const obj = storage.get(); if (obj) state = { ...state, ...obj }; state.dateISO = toISODate(new Date()); }
 
     function toISODate(d) {
         const y = d.getFullYear();
