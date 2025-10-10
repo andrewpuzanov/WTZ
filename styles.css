@@ -726,3 +726,52 @@ html[data-theme="3"] {
 /* When JS marks elements with .row-zone-remove (for your zone),
    give them the same background as night cells so the first two columns match. */
 .row-zone-remove { background: var(--hour-night) !important; }
+
+
+/* Current time badge inside the city header */
+.row-header { position: relative; }
+.now-badge {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  font: inherit;
+  font-size: 0.8em; /* match .city-name */
+  line-height: 1;
+  pointer-events: none;
+}
+.now-badge .now-time { line-height: 1; }
+.now-badge .now-ampm { line-height: 1; opacity: .85; font-size: 0.7em; }
+
+.row-header { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; align-items: start; position: relative;}
+
+
+/* Grid placement for header content */
+.row-header .city-name { grid-column: 1; grid-row: 1; font-size: 0.8em; font-weight: 700; }
+.row-header .city-sub  { grid-column: 1; grid-row: 2; }
+
+.row-header .now-badge {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  text-align: center !important;
+ }
+
+.row-header .now-badge .now-time,
+.row-header .now-badge .now-ampm {
+  font-size: inherit !important;
+  line-height: 1;
+  font-weight: 700;
+}
+  .row-header .now-badge .now-ampm {
+    margin-top: 2px;
+    align-self: center;
+    text-align: center !important;
+  }

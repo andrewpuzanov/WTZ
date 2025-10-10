@@ -1,5 +1,5 @@
-const APP_VERSION = "v1.9.134";
-/* World Time Zones v1.9.134 */
+const APP_VERSION = "v1.9.151";
+/* World Time Zones v1.9.151 */
 const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
 (() => {
     const $ = (sel, root = document) => root.querySelector(sel);
@@ -150,6 +150,64 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
 
     function applyTheme(index) { document.documentElement.setAttribute("data-theme", String(index)); }
 
+    function syncNowBadgeFont(headerEl) {
+        try {
+            const cityEl = headerEl.querySelector('.city-name');
+            const badge = headerEl.querySelector('.now-badge');
+            if (!cityEl || !badge) return;
+            const cs = window.getComputedStyle(cityEl);
+            const apply = (el) => {
+                el.style.fontFamily = cs.fontFamily;
+                el.style.fontSize = cs.fontSize;
+                el.style.fontWeight = cs.fontWeight;
+                el.style.lineHeight = cs.lineHeight;
+                el.style.letterSpacing = cs.letterSpacing;
+                el.style.textTransform = cs.textTransform;
+            };
+            apply(badge);
+            badge.querySelectorAll('.now-time, .now-ampm').forEach(apply);
+        } catch (_) {}
+    }
+
+
+    function fillNowBadge(el, tz) {
+        try {
+            const parts = new Intl.DateTimeFormat(undefined, {
+                hour: '2-digit', minute: '2-digit',
+                hour12: (state.timeFormat !== '24'),
+                timeZone: tz
+            }).formatToParts(new Date());
+            const hh = parts.find(p => p.type === 'hour')?.value ?? '';
+            const mm = parts.find(p => p.type === 'minute')?.value ?? '';
+            const dp = parts.find(p => p.type === 'dayPeriod')?.value ?? '';
+            el.innerHTML = "";
+            const l1 = document.createElement("div");
+            l1.className = "now-time";
+            l1.textContent = `${hh}:${mm}`;
+            el.appendChild(l1);
+            if (state.timeFormat === '12') {
+                const l2 = document.createElement("div");
+                l2.className = "now-ampm";
+                l2.textContent = String(dp || '').toUpperCase();
+                el.appendChild(l2);
+            }
+        } catch (e) { el.textContent = ""; }
+    }
+    let __nowTicker = null;
+    function ensureNowTicker() {
+        if (__nowTicker) return;
+        __nowTicker = setInterval(() => {
+            try {
+                document.querySelectorAll('.row').forEach(rowEl => {
+                    const tz = rowEl.getAttribute('data-tz');
+                    const el = rowEl.querySelector('.now-badge');
+                    if (tz && el) fillNowBadge(el, tz);
+                });
+            } catch (_) {}
+        }, 30000);
+    }
+
+
     function labelForRowSub(dateISO, tz) {
         const dt = makeZoned(dateISO, 12, tz);
         const parts = new Intl.DateTimeFormat('en-US', { timeZone: tz, timeZoneName: 'shortOffset', year: 'numeric', month: 'short', day: '2-digit' }).formatToParts(dt);
@@ -287,9 +345,17 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
         state.rows.forEach((row, idx) => {
             const node = rowTemplate.content.firstElementChild.cloneNode(true);
             node.setAttribute("data-index", String(idx));
+            node.setAttribute("data-tz", row.tz);
             //node.classList.toggle('hour night', true);
             $(".city-name", node).textContent = row.city;
             $(".city-sub", node).textContent = labelForRowSub(state.dateISO, row.tz);
+            const badge = $(".row-header .now-badge", node); if (badge) { fillNowBadge(badge, row.tz); syncNowBadgeFont($(".row-header", node)); }
+            const headerEl = $(".row-header", node);
+            if (headerEl) {
+                let badge = headerEl.querySelector(".now-badge");
+                if (!badge) { badge = document.createElement("div"); badge.className = "now-badge"; headerEl.appendChild(badge); }
+                fillNowBadge(badge, row.tz);
+            }
 
             // v1.9.85 - mark local machine zone
             try {
@@ -549,6 +615,8 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
         state.timeFormat = timeFormatSelect.value;
         persist();
         render();
+        ensureNowTicker();
+        ensureNowTicker();
     });
 
     themeSelect.addEventListener("change", () => {
@@ -573,8 +641,10 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
         }
 
         render();
+        ensureNowTicker();
 
         window.addEventListener("resize", () => {
+            try { document.querySelectorAll(".row-header").forEach(syncNowBadgeFont); } catch (_) {}
             updateFocusBar();
         });
     }
