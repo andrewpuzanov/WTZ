@@ -1,5 +1,5 @@
-const APP_VERSION = "v1.9.151";
-/* World Time Zones v1.9.151 */
+const APP_VERSION = "v1.9.156";
+/* World Time Zones v1.9.156 */
 const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
 (() => {
     const $ = (sel, root = document) => root.querySelector(sel);
@@ -183,7 +183,7 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
             el.innerHTML = "";
             const l1 = document.createElement("div");
             l1.className = "now-time";
-            l1.textContent = `${hh}:${mm}`;
+            l1.innerHTML = `${hh}<span class="blink-colon">:</span>${mm}`;
             el.appendChild(l1);
             if (state.timeFormat === '12') {
                 const l2 = document.createElement("div");
@@ -255,11 +255,17 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
     function formatCell(dateISO, hour, tz) {
         const dt = makeZoned(dateISO, hour, tz);
         const dateStr = new Intl.DateTimeFormat(undefined, { month: 'short', day: '2-digit', timeZone: tz }).format(dt);
-        const timeFmt = state.timeFormat === "12"
-            ? new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: tz })
-            : new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: tz });
-        const timeStr = timeFmt.format(dt);
-        return { dateStr, timeStr, dt };
+        if (state.timeFormat === "12") {
+            const parts = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: tz }).formatToParts(dt);
+            const h = parts.find(p => p.type === 'hour')?.value ?? '';
+            const m = parts.find(p => p.type === 'minute')?.value ?? '';
+            const dp = String(parts.find(p => p.type === 'dayPeriod')?.value || '').toUpperCase();
+            const timeStr = `${h}:${m}`;
+            return { dateStr, timeStr, ampm: dp, dt };
+        } else {
+            const timeStr = new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: tz }).format(dt);
+            return { dateStr, timeStr, ampm: '', dt };
+        }
     }
 
     function getCellWidth() {
@@ -402,9 +408,10 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
                 const tLabel = document.createElement("div");
                 tLabel.className = "time";
 
-                const { dateStr, timeStr, dt } = formatCell(state.dateISO, h, row.tz);
+                const { dateStr, timeStr, ampm, dt } = formatCell(state.dateISO, h, row.tz);
                 dLabel.textContent = dateStr;
                 tLabel.textContent = timeStr;
+                
                 // expose precise local date/time for this cell (used by GCal integration)
                 try {
                     const parts = new Intl.DateTimeFormat('en-CA', { timeZone: row.tz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(dt);
@@ -425,6 +432,12 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
 
                 hourEl.appendChild(dLabel);
                 hourEl.appendChild(tLabel);
+                if (state.timeFormat === "12") {
+                    const aLabel = document.createElement("div");
+                    aLabel.className = "ampm";
+                    aLabel.textContent = ampm;
+                    hourEl.appendChild(aLabel);
+                }
                 try {
                     const localHour = parseInt(new Intl.DateTimeFormat('en-US', { hour: '2-digit', hour12: false, timeZone: row.tz }).format(dt), 10);
                     hourEl.classList.add((localHour >= 8 && localHour <= 18) ? 'day' : 'night');
@@ -636,7 +649,11 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
                 { city: "Bucharest, Romania", tz: "Europe/Bucharest" },
                 { city: "London, UK", tz: "Europe/London" },
                 { city: "New York, USA", tz: "America/New_York" },
-                { city: "Tokyo, Japan", tz: "Asia/Tokyo" }
+                { city: "Tokyo, Japan", tz: "Asia/Tokyo" },
+                { city: "Los Angeles, USA", tz: "America/Los_Angeles" },
+                { city: "Berlin, Germany", tz: "Europe/Berlin" },
+                { city: "Warsaw, Poland", tz: "Europe/Warsaw" },
+                { city: "Kyiv, Ukraine", tz: "Europe/Kyiv" }
             ];
         }
 

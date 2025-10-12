@@ -768,10 +768,35 @@ html[data-theme="3"] {
 .row-header .now-badge .now-ampm {
   font-size: inherit !important;
   line-height: 1;
-  font-weight: 700;
+  /*font-weight: 700;*/
 }
   .row-header .now-badge .now-ampm {
     margin-top: 2px;
     align-self: center;
     text-align: center !important;
   }
+
+
+/* Blinking colon for time badge */
+@keyframes wt_blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.blink-colon { animation: wt_blink 1s steps(1, end) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .blink-colon { animation: none; }
+}
+
+/* AM/PM on third line in hour cells (12-hour mode) */
+.hour .ampm {
+  font-size: 10px;
+  
+  line-height: 1.1;
+
+  font-weight: 700;
+
+  color: inherit !important;
+  font-weight: 700;
+
+  color: var(--text) !important;
+}
