@@ -1,5 +1,5 @@
-const APP_VERSION = "v1.9.156";
-/* World Time Zones v1.9.156 */
+const APP_VERSION = "v1.9.220";
+/* World Time Zones v1.9.220 */
 const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
 (() => {
     const $ = (sel, root = document) => root.querySelector(sel);
@@ -109,6 +109,11 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
     const timeFormatSelect = $("#timeFormatSelect");
     const themeSelect = $("#themeSelect");
     const customTzBtn = $("#customTzBtn");
+    // Sorting guards: only allow sorting on (a) drag-and-drop or (b) Follow the Sun.
+    // Also allow during initial load to restore previously saved order.
+    window.__wtbInitPhase = true;
+    window.__wtbAllowSort = false;
+
 
     // Storage
     const STORAGE_KEY = "wtb_lite_state";
@@ -629,6 +634,7 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
         persist();
         render();
         ensureNowTicker();
+        setTimeout(function(){ window.__wtbInitPhase = false; }, 0);
         ensureNowTicker();
     });
 
@@ -659,6 +665,7 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
 
         render();
         ensureNowTicker();
+        setTimeout(function(){ window.__wtbInitPhase = false; }, 0);
 
         window.addEventListener("resize", () => {
             try { document.querySelectorAll(".row-header").forEach(syncNowBadgeFont); } catch (_) {}
@@ -667,297 +674,120 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
     }
 
     init();
-})();
 
-
-
-// v1.9.85 — DOM-first Follow the Sun (east → west) that does NOT depend on state
-(function () {
-    function parseOffset(txt) {
-        // Accept "UTC+5", "UTC+05:30", "GMT-3", etc.
-        var m = /(UTC|GMT)\s*([+-])\s*(\d{1,2})(?::?(\d{2}))?/i.exec(txt || "");
-        if (!m) return null;
-        var sign = m[2] === '-' ? -1 : 1;
-        var h = parseInt(m[3] || '0', 10);
-        var mm = parseInt(m[4] || '0', 10);
-        return sign * (h + mm / 60);
-    }
-    function rowLabel(row) {
-        var name = row.querySelector('.city-name, .city .name, .city, .label, .name');
-        var t = (name ? name.textContent : row.textContent) || "";
-        return t.trim().replace(/\s+/g, ' ').toLowerCase();
-    }
-    function tzFromRow(row) {
-        // try data attributes first
-        if (row.dataset) {
-            if (row.dataset.tz) return row.dataset.tz;
-            if (row.dataset.timezone) return row.dataset.timezone;
+    // v1.9.202 — Follow the Sun (on-demand, state-first)
+    (function(){
+        function _container() {
+            return document.getElementById('timeGrid') ||
+                document.querySelector('.grid .rows') ||
+                document.querySelector('.rows') ||
+                (function () { var r = document.querySelector('.row'); return r ? r.parentElement : null; })();
         }
-        // try elements carrying tz
-        var tzEl = row.querySelector('[data-tz],[data-timezone]');
-        if (tzEl) {
-            return tzEl.getAttribute('data-tz') || tzEl.getAttribute('data-timezone');
+        function _rowLabel(el) {
+            var labelEl = el.querySelector('.city-name, .city .name, .city, .label, .name');
+            return labelEl ? labelEl.textContent.trim() : '';
         }
-        return null;
-    }
-    function offsetForRow(row, atNoon) {
-        // 1) try parsing from visible meta like "Sep 17 • UTC+3"
-        var sub = row.querySelector('.city-sub, .meta');
-        var off = parseOffset(sub ? sub.textContent : row.textContent);
-        if (off !== null) return off;
-        // 2) fallback: compute from tz via Intl if available
-        var tz = tzFromRow(row);
-        if (tz) {
+        function _rowTZ(el) {
+            if (el.dataset) { return el.dataset.tz || el.dataset.timezone || ''; }
+            var node = el.querySelector('[data-tz],[data-timezone]');
+            return node ? (node.getAttribute('data-tz') || node.getAttribute('data-timezone') || '') : '';
+        }
+        function _nowEpoch() { return Date.now(); }
+        function _offsetForRow(el, atNow) {
             try {
-                var dtf = new Intl.DateTimeFormat('en-US', {
-                    timeZone: tz, hour12: false,
-                    year: 'numeric', month: '2-digit', day: '2-digit',
-                    hour: '2-digit', minute: '2-digit', second: '2-digit'
-                });
-                var parts = dtf.formatToParts(new Date(atNoon));
-                var map = {}; for (var i = 0; i < parts.length; i++) { map[parts[i].type] = parts[i].value; }
-                var localUTC = Date.UTC(+map.year, +map.month - 1, +map.day, +map.hour, +map.minute, +map.second);
-                return Math.round((localUTC - atNoon) / 60000) / 60; // return in hours (can be fractional)
-            } catch (e) { }
-        }
-        return 0;
-    }
-    function noonEpoch() {
-        var iso = (document.getElementById('dateSelect') && document.getElementById('dateSelect').value) || null;
-        var d = iso ? (function () { var p = iso.split('-'); return new Date(+p[0], +p[1] - 1, +p[2], 12, 0, 0); })()
-            : (function () { var dd = new Date(); return new Date(dd.getFullYear(), dd.getMonth(), dd.getDate(), 12, 0, 0); })();
-        return d.getTime();
-    }
-    function _doFollowSort() {
-        // find rows container (try #timeGrid, .grid .rows, or parent of first .row)
-        var container = document.getElementById('timeGrid') ||
-            document.querySelector('.grid .rows') ||
-            (function () { var r = document.querySelector('.row'); return r ? r.parentElement : null; })();
-        if (!container) return;
-        var rows = Array.prototype.slice.call(container.querySelectorAll(':scope > .row, .row')); // be generous
-        if (!rows.length) return;
-        var atNoon = noonEpoch();
-        rows.forEach(function (r) {
-            r.__off = offsetForRow(r, atNoon);
-            r.__lab = rowLabel(r);
-        });
-        rows.sort(function (a, b) { return (b.__off - a.__off) || a.__lab.localeCompare(b.__lab); });
-        rows.forEach(function (r) { container.appendChild(r); });
-        _wtb_syncOrderFromDOM();
-        if (window._wtb_saveOrderLabels) _wtb_saveOrderLabels();
-        if (window._wtb_saveOrderCookie) { _wtb_saveOrderCookie(); }
-        // try to persist if available
-        if (window.persist) try { persist(); } catch (e) { }
-    }
-    // public entry points
-    window.followTheSunSort = function () { _doFollowSort(); };
-    window.followTheSunSoft = function () { _doFollowSort(); };
-    // bind defensively
-    (function bind() {
-        var b = document.getElementById('followSunBtn');
-        if (b) b.onclick = function (e) { e && e.preventDefault(); _doFollowSort(); };
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', bind, { once: true });
-        }
-    })();
-})();
-
-// v1.9.85 — persist current DOM order (state + cookie fallback)
-function _wtb_syncOrderFromDOM() {
-    try {
-        var container = document.getElementById('timeGrid') ||
-            document.querySelector('.grid .rows') ||
-            (function () { var r = document.querySelector('.row'); return r ? r.parentElement : null; })();
-        if (!container) return;
-        var domRows = Array.prototype.slice.call(container.querySelectorAll(':scope > .row, .row'));
-        if (!domRows.length) return;
-        // Build order and light payload
-        var order = [], payload = [];
-        domRows.forEach(function (r) {
-            var labelEl = r.querySelector('.city-name, .city .name, .city, .label, .name');
-            var label = labelEl ? labelEl.textContent.trim() : '';
-            var tz = '';
-            if (r.dataset) tz = r.dataset.tz || r.dataset.timezone || '';
-            if (!tz) {
-                var el = r.querySelector('[data-tz],[data-timezone]');
-                if (el) tz = el.getAttribute('data-tz') || el.getAttribute('data-timezone') || '';
-            }
-            order.push((label || '').toLowerCase() + '|' + (tz || '').toLowerCase());
-            payload.push({ city: label, tz: tz });
-        });
-        // Reorder state.rows if present
-        if (window.state && Array.isArray(state.rows)) {
-            function key(o) {
-                var label = (o.city || o.label || '').toLowerCase();
-                var tz = (o.tz || o.timeZone || o.timezone || '').toLowerCase();
-                return label + '|' + tz;
-            }
-            state.rows.sort(function (a, b) {
-                return order.indexOf(key(a)) - order.indexOf(key(b));
-            });
-            if (typeof persist === 'function') { persist(); return; }
-        }
-        // Fallback cookie write (expires in ~180 days)
-        var json = encodeURIComponent(JSON.stringify(payload));
-        var exp = new Date(); exp.setDate(exp.getDate() + 180);
-        document.cookie = 'wtb_rows=' + json + '; expires=' + exp.toUTCString() + '; path=/';
-    } catch (e) {/* ignore */ }
-}
-
-
-// v1.9.85 — explicit order save & restore
-(function () {
-    function _wtb_rowKeyFromObj(o) {
-        var label = (o && (o.city || o.label || '')).toLowerCase();
-        var tz = (o && (o.tz || o.timeZone || o.timezone || '')).toLowerCase();
-        return label + '|' + tz;
-    }
-    function _wtb_rowKeyFromEl(r) {
-        var labelEl = r.querySelector('.city-name, .city .name, .city, .label, .name');
-        var label = labelEl ? labelEl.textContent.trim().toLowerCase() : '';
-        var tz = '';
-        if (r.dataset) tz = (r.dataset.tz || r.dataset.timezone || '');
-        if (!tz) {
-            var el = r.querySelector('[data-tz],[data-timezone]');
-            if (el) tz = (el.getAttribute('data-tz') || el.getAttribute('data-timezone') || '');
-        }
-        return (label || '') + '|' + (tz || '').toLowerCase();
-    }
-    function _wtb_container() {
-        return document.getElementById('timeGrid') ||
-            document.querySelector('.grid .rows') ||
-            document.querySelector('.rows') ||
-            (function () { var r = document.querySelector('.row'); return r ? r.parentElement : null; })();
-    }
-    function _wtb_saveOrderCookie() {
-        var c = _wtb_container(); if (!c) return;
-        var rows = Array.prototype.slice.call(c.querySelectorAll(':scope > .row, .row'));
-        if (!rows.length) return;
-        var order = rows.map(_wtb_rowKeyFromEl);
-        var exp = new Date(); exp.setDate(exp.getDate() + 180);
-        document.cookie = 'wtb_order=' + encodeURIComponent(JSON.stringify(order)) + '; expires=' + exp.toUTCString() + '; path=/';
-    }
-    function _wtb_readOrderCookie() {
-        var m = document.cookie.match(/(?:^|; )wtb_order=([^;]+)/);
-        if (!m) return null;
-        try { return JSON.parse(decodeURIComponent(m[1])); } catch (e) { return null; }
-    }
-    function _wtb_applyOrderToState(order) {
-        if (!order || !window.state || !Array.isArray(state.rows) || !state.rows.length) return false;
-        state.rows.sort(function (a, b) {
-            return order.indexOf(_wtb_rowKeyFromObj(a)) - order.indexOf(_wtb_rowKeyFromObj(b));
-        });
-        return true;
-    }
-    // 1) wrap render so every render saves order cookie
-    function _wrapRender() {
-        if (!window.render || window.render.__wtbWrapped) return;
-        var orig = window.render;
-        function wrapped() {
-            var r = orig.apply(this, arguments);
-            try { _wtb_saveOrderCookie(); } catch (e) { }
-            return r;
-        }
-        wrapped.__wtbWrapped = true;
-        window.render = wrapped;
-    }
-    // 2) on startup, try to apply cookie order before first paint
-    function _applyEarly() {
-        var order = _wtb_readOrderCookie();
-        if (order) {
-            var changed = _wtb_applyOrderToState(order);
-            if (changed && typeof window.render === 'function') { try { window.render(); } catch (e) { } }
-        }
-    }
-    // bind
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function () { _wrapRender(); _applyEarly(); });
-    } else { _wrapRender(); _applyEarly(); }
-    // also save order when leaving the page (last chance)
-    window.addEventListener('beforeunload', function () { try { _wtb_saveOrderCookie(); } catch (e) { } });
-    // expose for Follow-the-Sun call sites
-    window._wtb_saveOrderCookie = _wtb_saveOrderCookie;
-})();
-
-
-// v1.9.85 — ultra-direct order persistence (label-based), DOM-first
-(function () {
-    function container() {
-        return document.getElementById('timeGrid') ||
-            document.querySelector('.grid .rows') ||
-            document.querySelector('.rows') ||
-            (function () { var r = document.querySelector('.row'); return r ? r.parentElement : null; })();
-    }
-    function labelOfRow(r) {
-        var el = r.querySelector('.city-name, .city .name, .city, .label, .name');
-        return (el ? el.textContent : r.textContent).trim();
-    }
-    function readDomOrderLabels() {
-        var c = container(); if (!c) return [];
-        return Array.prototype.slice.call(c.querySelectorAll(':scope > .row, .row'))
-            .map(labelOfRow);
-    }
-    function writeOrder(order) {
-        try { localStorage.setItem('wtb_order_labels', JSON.stringify(order)); } catch (e) { }
-        try {
-            var exp = new Date(); exp.setDate(exp.getDate() + 180);
-            document.cookie = 'wtb_order_labels=' + encodeURIComponent(JSON.stringify(order)) + '; expires=' + exp.toUTCString() + '; path=/';
-        } catch (e) { }
-    }
-    function readOrder() {
-        try {
-            var ls = localStorage.getItem('wtb_order_labels');
-            if (ls) return JSON.parse(ls);
-        } catch (e) { }
-        var m = document.cookie.match(/(?:^|; )wtb_order_labels=([^;]+)/);
-        if (m) { try { return JSON.parse(decodeURIComponent(m[1])); } catch (e) { } }
-        return null;
-    }
-    function applyOrderToDOM(order) {
-        var c = container(); if (!c || !order || !order.length) return false;
-        var rows = Array.prototype.slice.call(c.querySelectorAll(':scope > .row, .row'));
-        if (!rows.length) return false;
-        var map = new Map();
-        rows.forEach(function (r) { map.set(labelOfRow(r), r); });
-        var moved = false;
-        order.forEach(function (lbl) {
-            var el = map.get(lbl);
-            if (el) { c.appendChild(el); moved = true; }
-        });
-        return moved;
-    }
-    function syncStateToDOMByLabels() {
-        try {
-            if (!window.state || !Array.isArray(state.rows) || !state.rows.length) return;
-            var order = readDomOrderLabels();
-            if (!order.length) return;
-            state.rows.sort(function (a, b) {
-                var la = (a.city || a.label || ''); var lb = (b.city || b.label || '');
-                return order.indexOf(la) - order.indexOf(lb);
-            });
-            if (typeof persist === 'function') persist();
-        } catch (e) { }
-    }
-    // Reapply saved order after first paint, then sync+save again
-    function onReady() {
-        setTimeout(function () {
-            var order = readOrder();
-            if (order && order.length) {
-                var moved = applyOrderToDOM(order);
-                if (moved) {
-                    syncStateToDOMByLabels();
-                    writeOrder(readDomOrderLabels());
+                var tz = _rowTZ(el) || 'UTC';
+                var fmt = new Intl.DateTimeFormat('en-US', { timeZone: tz, timeZoneName: 'shortOffset' });
+                var parts = fmt.formatToParts(new Date(atNow));
+                var tzn = parts.find(function(p){ return p.type==='timeZoneName'; });
+                var label = tzn ? tzn.value : '';
+                // Expected forms: 'GMT+7', 'GMT+07:00', 'UTC-05', etc.
+                var m = label.match(/([+-])(\d{1,2})(?::?(\d{2}))?/);
+                if (!m) {
+                    // Fallback: try to compute offset via two formatters (utc vs tz) on the same instant
+                    var utc = new Intl.DateTimeFormat('en-US', { timeZone: 'UTC', hour12:false, hour:'2-digit', minute:'2-digit', second:'2-digit' }).format(new Date(atNow));
+                    var loc = new Intl.DateTimeFormat('en-US', { timeZone: tz,   hour12:false, hour:'2-digit', minute:'2-digit', second:'2-digit' }).format(new Date(atNow));
+                    var toMin = function(s){ return parseInt(s.slice(0,2),10)*60 + parseInt(s.slice(3,5),10); };
+                    var diff = toMin(loc) - toMin(utc);
+                    // Normalize to range [-720, +840] accounting for day wrap
+                    if (diff > 720) diff -= 1440; if (diff < -720) diff += 1440;
+                    return diff; // already minutes from UTC
                 }
-            }
-        }, 0);
-    }
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onReady);
-    else onReady();
-    // Always save after Follow Sun sorts, if hook exists
-    window._wtb_saveOrderLabels = function () { writeOrder(readDomOrderLabels()); };
+                var sign = m[1] === '-' ? -1 : 1;
+                var hh = parseInt(m[2], 10) || 0;
+                var mm = parseInt(m[3] || '0', 10) || 0;
+                return sign * (hh*60 + mm);
+            } catch(e) { return 0; }
+        }
+        function _syncStateToDOMByLabels() {
+            if (!window.state || !Array.isArray(state.rows)) return;
+            var c = _container(); if (!c) return;
+            var labels = Array.prototype.slice.call(c.querySelectorAll(':scope > .row, .row'))
+                          .map(_rowLabel);
+            state.rows.sort(function(a,b){
+                var la = (a.city || a.label || '');
+                var lb = (b.city || b.label || '');
+                return labels.indexOf(la) - labels.indexOf(lb);
+            });
+        }
+        function _followOnce() {
+            var c = _container(); if (!c) return;
+            var rows = Array.prototype.slice.call(c.querySelectorAll(':scope > .row, .row'));
+            if (!rows.length) return;
+            var atNow = _nowEpoch();
+            rows.forEach(function(r){
+                r.__off = _offsetForRow(r, atNow);
+                r.__lab = _rowLabel(r);
+            });
+            // Only sort when explicitly requested
+            rows.sort(function(a,b){ return (b.__off - a.__off) || a.__lab.localeCompare(b.__lab); });
+            rows.forEach(function(r){ c.appendChild(r); });
+            _syncStateToDOMByLabels();
+            try { persist(); } catch(e){}
+        }
+        function _bind() {
+            var btn = document.getElementById('followSunBtn');
+            if (!btn) return;
+            btn.addEventListener('click', function(){
+                _followOnce();
+            });
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _bind);
+        else _bind();
+        // Optional global for programmatic trigger
+        window.followTheSunOnce = _followOnce;
+    })();
+
+// v1.9.220 — Persist DOM order after Follow the Sun (uses the same state + storage as DnD)
+(function(){
+  function container(){ return document.getElementById('timeGrid') || document.querySelector('.rows'); }
+  function rowsInDOM(){ var c = container(); return c ? Array.prototype.slice.call(c.querySelectorAll(':scope > .row, .row')) : []; }
+  function captureAndPersist(){
+    try {
+      var els = rowsInDOM(); if (!els.length) return;
+      if (!state || !Array.isArray(state.rows) || !state.rows.length) return;
+      // Use pre-render data-index to map DOM order to existing objects
+      var idxs = els.map(function(el){ var v = el.getAttribute('data-index'); return v==null? -1 : parseInt(v,10); });
+      var ordered = []; idxs.forEach(function(i){ if (Number.isInteger(i) && i>=0 && i<state.rows.length) ordered.push(state.rows[i]); });
+      if (ordered.length) { state.rows = ordered; persist(); if (typeof render==='function') render(); }
+    } catch(e){}
+  }
+  // Expose a console helper that closes over the real 'state' in this IIFE
+  window.WTB = Object.assign({}, window.WTB||{}, { saveOrderFromDOM: captureAndPersist });
+  // Hook Follow-the-Sun button to persist after its own handler runs
+  function bind(){
+    var btn = document.getElementById('followSunBtn'); if (!btn) return;
+    btn.addEventListener('click', function(){ setTimeout(captureAndPersist, 0); setTimeout(captureAndPersist, 120); });
+  }
+  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', bind); else bind();
+})();
 })();
 
 
+
+
+// Follow-the-Sun DOM helpers removed in v1.9.201.
+// Ordering is now persisted ONLY via state.rows in localStorage (wtb_lite_state).
+window._wtb_saveOrderLabels = function(){};
 // v1.9.85 — robust Google Calendar helpers
 function z2(n) { return String(n).padStart(2, '0'); }
 function makeGCalUrlFromParts(tz, y, m, d, h, min) {
