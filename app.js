@@ -1,5 +1,5 @@
-const APP_VERSION = "v1.9.220";
-/* World Time Zones v1.9.220 */
+const APP_VERSION = "v1.9.228";
+/* World Time Zones v1.9.228 */
 const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
 (() => {
     const $ = (sel, root = document) => root.querySelector(sel);
@@ -97,6 +97,53 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
         "Seattle": "America/Los_Angeles",
         "Seattle, USA": "America/Los_Angeles"
     };
+// v1.9.224 — Abbreviation → IANA tz (with names)
+const ABBREV_TZ = {
+  UTC:{abbr:"UTC",name:"Coordinated Universal Time",tz:"Etc/UTC"},
+  GMT:{abbr:"GMT",name:"Greenwich Mean Time",tz:"Etc/UTC"},
+
+  BST:{abbr:"BST",name:"British Summer Time",tz:"Europe/London"},
+  WET:{abbr:"WET",name:"Western European Time",tz:"Europe/Lisbon"},
+  WEST:{abbr:"WEST",name:"Western European Summer Time",tz:"Europe/Lisbon"},
+
+  CET:{abbr:"CET",name:"Central European Time",tz:"Europe/Berlin"},
+  CEST:{abbr:"CEST",name:"Central European Summer Time",tz:"Europe/Berlin"},
+
+  EET:{abbr:"EET",name:"Eastern European Time",tz:"Europe/Athens"},
+  EEST:{abbr:"EEST",name:"Eastern European Summer Time",tz:"Europe/Athens"},
+
+  MSK:{abbr:"MSK",name:"Moscow Time",tz:"Europe/Moscow"},
+
+  IST:{abbr:"IST",name:"India Standard Time",tz:"Asia/Kolkata"},
+  JST:{abbr:"JST",name:"Japan Standard Time",tz:"Asia/Tokyo"},
+  KST:{abbr:"KST",name:"Korea Standard Time",tz:"Asia/Seoul"},
+
+  PST:{abbr:"PST",name:"Pacific Standard Time",tz:"America/Los_Angeles"},
+  PDT:{abbr:"PDT",name:"Pacific Daylight Time",tz:"America/Los_Angeles"},
+
+  MST:{abbr:"MST",name:"Mountain Standard Time",tz:"America/Denver"},
+  MDT:{abbr:"MDT",name:"Mountain Daylight Time",tz:"America/Denver"},
+
+  CST:{abbr:"CST",name:"Central Standard Time",tz:"America/Chicago"},
+  CDT:{abbr:"CDT",name:"Central Daylight Time",tz:"America/Chicago"},
+
+  EST:{abbr:"EST",name:"Eastern Standard Time",tz:"America/New_York"},
+  EDT:{abbr:"EDT",name:"Eastern Daylight Time",tz:"America/New_York"},
+
+  AKST:{abbr:"AKST",name:"Alaska Standard Time",tz:"America/Anchorage"},
+  AKDT:{abbr:"AKDT",name:"Alaska Daylight Time",tz:"America/Anchorage"},
+  HST:{abbr:"HST",name:"Hawaii–Aleutian Standard Time",tz:"Pacific/Honolulu"},
+
+  AEST:{abbr:"AEST",name:"Australian Eastern Standard Time",tz:"Australia/Sydney"},
+  AEDT:{abbr:"AEDT",name:"Australian Eastern Daylight Time",tz:"Australia/Sydney"},
+  ACST:{abbr:"ACST",name:"Australian Central Standard Time",tz:"Australia/Adelaide"},
+  ACDT:{abbr:"ACDT",name:"Australian Central Daylight Time",tz:"Australia/Adelaide"},
+  AWST:{abbr:"AWST",name:"Australian Western Standard Time",tz:"Australia/Perth"},
+
+  NZST:{abbr:"NZST",name:"New Zealand Standard Time",tz:"Pacific/Auckland"},
+  NZDT:{abbr:"NZDT",name:"New Zealand Daylight Time",tz:"Pacific/Auckland"}
+};
+
 
     // DOM
     const grid = $("#timeGrid");
@@ -528,7 +575,18 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
             }
         }
 
-        merged.forEach(entry => {
+        
+        // Include abbreviation entries as pseudo-cities with full labels
+        if (typeof ABBREV_TZ !== 'undefined' && ABBREV_TZ) {
+            Object.keys(ABBREV_TZ).forEach(code => {
+                const cfg = ABBREV_TZ[code];
+                const label = cfg.abbr + " (" + cfg.name + ")";
+                if (!merged.find(e => e.label.toLowerCase() === label.toLowerCase())) {
+                    merged.push({ label: label, builtin: true, abbr: code, tz: cfg.tz });
+                }
+            });
+        }
+merged.forEach(entry => {
             const opt = document.createElement("option");
             opt.value = entry.label;
             if (entry.builtin) opt.label = CITY_TZ[entry.label];
@@ -546,6 +604,46 @@ const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
     }
 
     async function addCitySmart(name) {
+    // v1.9.227 — accept abbreviations typed/selected (case-insensitive)
+    try{
+        const raw = String(name||'').trim();
+        if(raw){
+            const mm = raw.match(/^([A-Za-z]{2,5})(?:\s*\(|$)/);
+            if(mm){
+                const code = mm[1].toUpperCase();
+                if(typeof ABBREV_TZ!=='undefined' && ABBREV_TZ && Object.prototype.hasOwnProperty.call(ABBREV_TZ, code)){
+                    const cfg = ABBREV_TZ[code];
+                    pushCity({ city: cfg.abbr + " (" + cfg.name + ")", tz: cfg.tz });
+                    return;
+                }
+            }
+        }
+    }catch(e){}
+
+    // v1.9.224 — Accept abbreviations in the same input (case-insensitive)
+    try {
+        const raw = String(name||'').trim();
+        if (raw) {
+            const code = raw.toUpperCase();
+            if (ABBREV_TZ && Object.prototype.hasOwnProperty.call(ABBREV_TZ, code)) {
+                const cfg = ABBREV_TZ[code];
+                // Add as "ABBR (Full Name)"
+                pushCity({ city: cfg.abbr + " (" + cfg.name + ")", tz: cfg.tz });
+                return;
+            }
+            // Also accept "ABBR (Name)" typed by user
+            const m = raw.match(/^([A-Za-z]{2,5})\s*\(/);
+            if (m) {
+                const code2 = m[1].toUpperCase();
+                if (ABBREV_TZ && Object.prototype.hasOwnProperty.call(ABBREV_TZ, code2)) {
+                    const cfg2 = ABBREV_TZ[code2];
+                    pushCity({ city: cfg2.abbr + " (" + cfg2.name + ")", tz: cfg2.tz });
+                    return;
+                }
+            }
+        }
+    } catch(e) {}
+
         if (CITY_TZ[name]) { pushCity({ city: name, tz: CITY_TZ[name] }); return; }
 
         let sug = smartCache.get(name.toLowerCase());
@@ -828,4 +926,43 @@ function parseCellDateTime(cell, fallbackISO) {
     const y = +fallbackISO.slice(0, 4), mo = +fallbackISO.slice(5, 7), da = +fallbackISO.slice(8, 10);
     return { y: y, m: mo, d: da, h: hr, min: 0 };
 }
+
+
+
+// v1.9.227 — Ensure datalist shows full labels for abbreviations
+(function(){
+  function buildAbbrevOptions(dl){
+    if (!dl || !window.ABBREV_TZ) return;
+    // Remove any pure-abbr dupes
+    const toRemove = [];
+    dl.querySelectorAll("option").forEach(op => {
+      const v = (op.getAttribute("value")||"").trim();
+      const m = v.match(/^([A-Za-z]{2,5})$/);
+      if(m && ABBREV_TZ[m[1].toUpperCase()]) toRemove.push(op);
+    });
+    toRemove.forEach(op => op.remove());
+    // Add/normalize with "ABBR (Full Name)"
+    Object.keys(ABBREV_TZ).forEach(k => {
+      const cfg = ABBREV_TZ[k];
+      const label = cfg.abbr + " (" + cfg.name + ")";
+      // Find existing normalized option
+      let op = Array.from(dl.querySelectorAll("option")).find(o => (o.value||"").toLowerCase() === label.toLowerCase());
+      if(!op){
+        op = document.createElement("option");
+        op.value = label;
+        op.textContent = label;
+        dl.appendChild(op);
+      }else{
+        op.value = label;
+        op.textContent = label;
+      }
+    });
+  }
+  function init(){
+    const dl = document.getElementById("cityList");
+    buildAbbrevOptions(dl);
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
 
