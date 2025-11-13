@@ -1,5 +1,5 @@
-const APP_VERSION = "v1.9.228";
-/* World Time Zones v1.9.228 */
+const APP_VERSION = "v1.9.231";
+/* World Time Zones v1.9.231 */
 const LOCAL_TZ = (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'UTC';
 (() => {
     const $ = (sel, root = document) => root.querySelector(sel);
@@ -260,13 +260,52 @@ const ABBREV_TZ = {
     }
 
 
-    function labelForRowSub(dateISO, tz) {
-        const dt = makeZoned(dateISO, 12, tz);
-        const parts = new Intl.DateTimeFormat('en-US', { timeZone: tz, timeZoneName: 'shortOffset', year: 'numeric', month: 'short', day: '2-digit' }).formatToParts(dt);
-        const tzName = parts.find(p => p.type === 'timeZoneName')?.value ?? '';
-        const dateStr = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeZone: tz }).format(dt);
-        return `${dateStr} • ${tzName}`;
+    function labelForRowSub(dateISO, tz, cityLabel) {
+    const dt = makeZoned(dateISO, 12, tz);
+
+    // Build offset token like "GMT+1" or "GMT+5:30"
+    const partsOff = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz,
+        timeZoneName: 'shortOffset',
+        year: 'numeric', month: 'short', day: '2-digit'
+    }).formatToParts(dt);
+    const offsetTok = (partsOff.find(p => p.type === 'timeZoneName') || {}).value || '';
+
+    // If this is an abbreviation row (label starts with "ABBR ("), show only GMT offset
+    const isAbbrevRow = /^[A-Z]{2,5}\s*\(/.test(String(cityLabel||''));
+    if (isAbbrevRow) return offsetTok;
+
+    // Try to get locale short tz name (EST, CET...). If it's generic "GMT±", use fallback by offset.
+    const partsAbbr = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz,
+        timeZoneName: 'short',
+        year: 'numeric', month: 'short', day: '2-digit'
+    }).formatToParts(dt);
+    let abbr = (partsAbbr.find(p => p.type === 'timeZoneName') || {}).value || '';
+
+    if (!abbr || /^GMT/i.test(abbr)) {
+        // Preferred abbreviation by offset (DST-neutral guess)
+        const OFFSET_PREF_ABBR = {
+            "-12":"AoE","-11":"SST","-10":"HST","-9":"AKST","-8":"PST","-7":"MST","-6":"CST","-5":"EST",
+            "-4":"AST","-3":"BRT","-2":"GST-2","-1":"AZOT","0":"GMT","+1":"CET","+2":"EET","+3":"MSK",
+            "+3:30":"IRST","+4":"GST","+4:30":"AFT","+5":"PKT","+5:30":"IST","+5:45":"NPT","+6":"BST",
+            "+6:30":"MMT","+7":"ICT","+8":"CST","+9":"JST","+9:30":"ACST","+10":"AEST","+10:30":"ACDT",
+            "+11":"AEDT","+12":"NZST","+13":"NZDT","+14":"LINT"
+        };
+        const m = offsetTok.match(/GMT([+\-])(\d{1,2})(?::?(\d{2}))?/i);
+        if (m) {
+            const sign = m[1] === '-' ? '-' : '+';
+            const hh = String(parseInt(m[2], 10));
+            const mm = m[3] ? (':' + m[3]) : '';
+            const key = (sign + hh + (mm || '')).replace('+-', '-');
+            if (Object.prototype.hasOwnProperty.call(OFFSET_PREF_ABBR, key)) {
+                abbr = OFFSET_PREF_ABBR[key];
+            }
+        }
     }
+    if (!abbr) abbr = "GMT";
+    return `${abbr} • ${offsetTok}`;
+}
 
     function makeZoned(dateISO, hour, tz) {
         const [y, m, d] = dateISO.split("-").map(Number);
@@ -406,7 +445,7 @@ const ABBREV_TZ = {
             node.setAttribute("data-tz", row.tz);
             //node.classList.toggle('hour night', true);
             $(".city-name", node).textContent = row.city;
-            $(".city-sub", node).textContent = labelForRowSub(state.dateISO, row.tz);
+            $(".city-sub", node).textContent = labelForRowSub(state.dateISO, row.tz, row.city);
             const badge = $(".row-header .now-badge", node); if (badge) { fillNowBadge(badge, row.tz); syncNowBadgeFont($(".row-header", node)); }
             const headerEl = $(".row-header", node);
             if (headerEl) {
